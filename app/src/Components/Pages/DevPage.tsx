@@ -20,9 +20,8 @@ export const DevPage: React.FC<Props> = ({ sampleProp }) => {
   const handleChange = (e : React.ChangeEvent<HTMLInputElement>) => {
   };
 
-  const onClickDevbutton = () => {
-    const gpsCoord: LatLng = JGEngine.getGPSCoords();
-    setGPSCoords(gpsCoord);
+  const onClickGetGPSCoordsButton = () => {
+    JGEngine.getGPSCoords(setGPSCoords);
   }
 
   // ___ method ___ ___ ___ ___ ___
@@ -32,8 +31,10 @@ export const DevPage: React.FC<Props> = ({ sampleProp }) => {
 
   return (
     <div>
+
       <h2>{ DevPage.name }</h2>
-      <Button onClick = { onClickDevbutton } variant="outlined" size = "small"> Get GPS Coord </Button>
+
+      <Button onClick = { onClickGetGPSCoordsButton } variant="outlined" size = "small"> Get GPS Coords </Button>
 
       {/** GPS座標が取得されていない場合、ハイフンを表示する */}
       <p> { "Lat: " + (gpsCoords?.lat ? gpsCoords?.lat : "-" ) } </p>
