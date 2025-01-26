@@ -10,20 +10,21 @@ export class JGEngine{
    *  GPS座標の取得にはGeolocationAPIを利用
    * 
    * @param
-   *  引数1つ返り値なしの関数.基本的にはsetterを想定している
+   *  LatLng型の引数を1つ取る返り値なしの関数（setterを想定する）
    * 
    * @returns
    *  GPS座標を格納したオブジェクト
    */
-  static getGPSCoords(func: (prm: any) => void){
+  static getGPSCoords(func: (prm: LatLng) => void){
 
     /** 
      * Memo: 素直にGPS座標を呼び出し元にreturnする処理としなかった理由
-     *  GeolocationAPIがGPS座標をreturnしない仕様に合わせたため。
-     *  本APIはコールバック関数内でDOMへセットするような用法が基本的である模様。
+     * 
+     *  GeolocationAPIがGPS座標をreturnしない仕様であり、
+     *  コールバック関数内でDOMへセットするような用法を基本と想定していたため。
+     * 
      *  汎用性を考えると、外部へreturnする方式が望ましいが、
      *  コードの複雑性と現時点での必要性を鑑みて本実装に落ち着いた。
-     * 
      *  （本音のところ、コールバック対応しつつ、綺麗に外部へreturnする方法が思いつかない）
      *  （できればreturnする方式に変更したい）
      */
