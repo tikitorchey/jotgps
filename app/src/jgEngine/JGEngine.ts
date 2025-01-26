@@ -1,6 +1,6 @@
 import { LatLng } from "./Types";
 
-class JGEngine{
+export class JGEngine{
 
   /**
    * 端末が位置するGPS座標（緯度経度系）を端末から取得する関数

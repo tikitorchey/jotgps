@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "@mui/material";
-import JGEngine from "../../jgEngine/JGEngine";
+import { JGEngine } from "../../jgEngine/JGEngine";
 import { LatLng } from "../../jgEngine/Types";
 
 type Props = {
