@@ -8,9 +8,9 @@ export class Jotting{
   gpsCoords : LatLng;
   supInfo   : { alt: number | null };
   metaData  : {
-    date        : Date    | undefined,    // ユーザーがメモ用に使用するフィールド（レコードの作成日時を示す用途ではない）
-    title       : string  | undefined,
-    description : string  | undefined
+    date        : Date    | null,    // ユーザーがメモ用に使用するフィールド（レコードの作成日時を示す用途ではない）
+    title       : string  | null,
+    description : string  | null
   }
 
   constructor(){
@@ -18,9 +18,9 @@ export class Jotting{
     this.gpsCoords  = { lat: null, lng: null };
     this.supInfo    = { alt: null };
     this.metaData   = {
-      date        : undefined,
-      title       : undefined,
-      description : undefined
+      date        : null,
+      title       : null,
+      description : null
     };
   }
   
