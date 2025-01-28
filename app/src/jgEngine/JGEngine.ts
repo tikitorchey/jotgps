@@ -22,8 +22,8 @@ export class JGEngine{
 
   /**
    * JavaScriptオブジェクトをJSONファイルへ変換し、指定された名前のファイルを端末へダウンロードする処理
-   * @param targetData 
-   * @param fileName 
+   * @param targetData JSONファイルへ変換するJavaScriptオブジェクト
+   * @param fileName 出力するJSONファイルの名前
    */
   static exportJSON(targetData: Object, fileName: string){
 
@@ -36,14 +36,15 @@ export class JGEngine{
      */
     const url = URL.createObjectURL(blob);
 
-    // ダウンロードリンクをHTMLのaタグへセットし、クリックイベントを発火させダウンロードを実行
-    const a = document.createElement("a");
-    a.setAttribute("href", url);
-    a.setAttribute("download", `${ fileName }.csv`);
-    a.click();
+    // HTML aタグのクリックイベントを介してダウンロードを実行
+    const anchorTag = document.createElement("a");              // aタグを生成
+    anchorTag.setAttribute("href", url);                        // aタグのリンク先へ生成したURLを設定
+    anchorTag.setAttribute("download", `${ fileName }.json`);   // ダウンロード実行時のファイル名を設定
+    anchorTag.click();                                          // クリックイベントを発火しダウンロードを実行
 
     // URLをメモリから解放
     window.URL.revokeObjectURL(url);
+    
   }
 
 }
