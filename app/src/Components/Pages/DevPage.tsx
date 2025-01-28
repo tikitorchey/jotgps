@@ -49,6 +49,19 @@ export const DevPage: React.FC<Props> = ({ sampleProp }) => {
 
   }
 
+  const onClickClearJottingListButton = () => {
+    setJottingList([]);
+  }
+
+  const onClickImportJSONButton = () => {
+
+  }
+
+  const onClickExportJSONButton = () => {
+    const fileName: string = "sample";
+    JGEngine.exportJSON(jottingList, fileName);
+  }
+
   // ___ method ___ ___ ___ ___ ___
   const test = () => {
     console.log('test');
@@ -60,8 +73,17 @@ export const DevPage: React.FC<Props> = ({ sampleProp }) => {
 
       <h2>{ DevPage.name }</h2>
 
-      <Button onClick = { onClickGetGPSCoordsButton }     variant = "outlined" size = "small"> Get GPS Coords </Button>
-      <Button onClick = { onClickAddJottingToListButton } variant = "outlined" size = "small"> Add Jotting To List </Button>
+      <div>
+        <button onClick = { onClickGetGPSCoordsButton }> Get GPS Coords </button>
+      </div>
+      <div>
+        <button onClick = { onClickAddJottingToListButton }> Add Jotting To List </button>
+        <button onClick = { onClickClearJottingListButton }> Clear Jottings List</button>
+      </div>
+      <div>
+        <button onClick = { onClickImportJSONButton }> Import JSON </button>
+        <button onClick = { onClickExportJSONButton }> Export JSON </button>
+      </div>
 
       {/** 取得したgpsCoordsを表示する */}
       {/** GPS座標が取得されていない場合、ハイフンを表示する */}
