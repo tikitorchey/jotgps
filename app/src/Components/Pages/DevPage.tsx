@@ -25,10 +25,7 @@ export const DevPage: React.FC<Props> = ({ sampleProp }) => {
   const onClickGetGPSCoordsButton = async () => {
 
     const geoPos: GeolocationPosition = await JGEngine.getGPSCoords();
-    const gpsCoords: LatLng = { 
-      lat: geoPos.coords.latitude,
-      lng: geoPos.coords.longitude
-    }
+    const gpsCoords: LatLng = { lat: geoPos.coords.latitude, lng: geoPos.coords.longitude }
     setGPSCoords(gpsCoords);
     
   }
@@ -38,9 +35,8 @@ export const DevPage: React.FC<Props> = ({ sampleProp }) => {
     const jotting: Jotting = new Jotting();
 
     // GPS座標を取得・セット
-    const gpsCoords: GeolocationPosition = await JGEngine.getGPSCoords();
-    jotting.gpsCoords.lat = gpsCoords.coords.latitude;
-    jotting.gpsCoords.lng = gpsCoords.coords.longitude;
+    const geoPos: GeolocationPosition = await JGEngine.getGPSCoords();
+    jotting.initialize(geoPos);
 
     /** Memo: structuredClone関数によりオブジェクトを複製する理由
      *    Reactはオブジェクト内部の変更を検出できない。
@@ -73,9 +69,6 @@ export const DevPage: React.FC<Props> = ({ sampleProp }) => {
       <p> { "Lng: " + (gpsCoords?.lng ? gpsCoords?.lng : "-" ) } </p>
 
       <table>
-        <caption>
-          Jotting Records
-        </caption>
         <thead>
           <tr>
             <th scope = "col"> ID         </th>
@@ -89,7 +82,7 @@ export const DevPage: React.FC<Props> = ({ sampleProp }) => {
           { jottingList.map( (jotting: Jotting) => (
             <tr key = { jotting.id }>
               <th scope = "row"> { jotting.id } </th>
-              <th> { (jotting.metaData.date ? jotting.metaData.date.toDateString() : "-" ) } </th>
+              <th> { (jotting.metaData.date ? jotting.metaData.date : "-" ) } </th>
               <th> { (jotting.gpsCoords.lat ? jotting.gpsCoords.lat : "-" ) } </th>
               <th> { (jotting.gpsCoords.lng ? jotting.gpsCoords.lng : "-" ) } </th>
             </tr>

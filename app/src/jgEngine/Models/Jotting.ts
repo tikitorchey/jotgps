@@ -1,18 +1,30 @@
 import { ulid } from "ulid";
-import { JottingID, LatLng } from "../Types" 
+import { LatLng } from "../Types" 
 
 // GPS座標のレコードおよび周辺情報を集約するクラス
 export class Jotting{
 
-  id        : JottingID;
+  /**
+   * id :
+   *  - Jottingを一意に識別するための識別番号
+   *  - ULID形式を使用する
+   * metadate.date:
+   *  - 基本的にはGPS座標のレコードを記録した日時。例外的にユーザーが任意の用途で設定してもよい
+   *  - エポックミリ秒を使用する
+   */
+  id        : string;
   gpsCoords : LatLng;
   supInfo   : { alt: number | null };
   metaData  : {
-    date        : Date    | null,    // ユーザーがメモ用に使用するフィールド（レコードの作成日時を示す用途ではない）
+    date        : number  | null,
     title       : string  | null,
     description : string  | null
   }
 
+  /** Attention:
+   *  コンストラクター呼び出し時には、各種プロパティにデータをセットしないこと
+   *  初期化の際は、本クラスのinitialize関数を用いること
+   */
   constructor(){
     this.id         = ulid();
     this.gpsCoords  = { lat: null, lng: null };
@@ -22,6 +34,18 @@ export class Jotting{
       title       : null,
       description : null
     };
+  }
+
+  /**
+   * GPS座標に関する情報を各プロパティへセットする初期化用の関数
+   * @param geoPos 
+   *  Geolocation APIから取得したオブジェクト
+   */
+  initialize(geoPos: GeolocationPosition){
+    this.gpsCoords.lat  = geoPos.coords.latitude;
+    this.gpsCoords.lng  = geoPos.coords.longitude;
+    this.supInfo.alt    = geoPos.coords.altitude;
+    this.metaData.date  = Date.now();
   }
   
 }
