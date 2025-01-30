@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Button } from "@mui/material";
 import { JGEngine } from "../../jgEngine/JGEngine";
 import { LatLng, Jotter } from "../../jgEngine/Types";
@@ -14,6 +14,9 @@ export const DevPage: React.FC<Props> = ({ sampleProp }) => {
   const [ sampleState,  setSampleState ]  = useState<string>('This is SampleState');
   const [ gpsCoords,    setGPSCoords ]    = useState<LatLng>({ lat: null, lng: null });
   const [ jottingList,  setJottingList ]  = useState<Array<Jotting>>([]);
+
+  // ___ use ref ___ ___ ___ ___ ___
+  const jsonInputRef = useRef<HTMLInputElement | null>(null);
 
   // ___ use effect ___ ___ ___ ___ ___
   useEffect( () => { console.log(sampleState) }, [ sampleState ] );
@@ -55,6 +58,12 @@ export const DevPage: React.FC<Props> = ({ sampleProp }) => {
 
   const onClickImportJSONButton = () => {
 
+    const inputtedFiles = jsonInputRef?.current?.files;
+    if(inputtedFiles && inputtedFiles[0]){
+      const targetJSON: File = inputtedFiles[0];
+      JGEngine.importJSON(targetJSON);
+    }
+
   }
 
   const onClickExportJSONButton = () => {
@@ -81,8 +90,11 @@ export const DevPage: React.FC<Props> = ({ sampleProp }) => {
         <button onClick = { onClickClearJottingListButton }> Clear Jottings List</button>
       </div>
       <div>
-        <button onClick = { onClickImportJSONButton }> Import JSON </button>
         <button onClick = { onClickExportJSONButton }> Export JSON </button>
+      </div>
+      <div>
+        <input ref = { jsonInputRef } type = "file" accept = ".json"/>
+        <button onClick = { onClickImportJSONButton }> Import JSON </button>
       </div>
 
       {/** 取得したgpsCoordsを表示する */}
