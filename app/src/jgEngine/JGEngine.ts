@@ -1,4 +1,4 @@
-import { LatLng } from "./Types";
+import Utils from "./Utils";
 
 export class JGEngine{
 
@@ -47,23 +47,18 @@ export class JGEngine{
 
   }
 
-  static async importJSON(file: File){
+  static async importJSON(): Promise<Object>{
 
-    const readFile = async (file: File) => {
-      return new Promise((resolve, reject) => {
-          const fileReader = new FileReader();
-          fileReader.addEventListener('load', (event) => { resolve(event?.target?.result) });
-          fileReader.addEventListener('error', (event) => { reject('failed to read file') });
-          fileReader.readAsText(file);
-      });
-  };
+    // ユーザーからの入力ファイルを取得
+    const file: File = await Utils.getFile();
 
-  {/** @ts-ignore */}
-  const jsonFile: string = await readFile(file);
-  const jsonObj = JSON.parse(jsonFile);
-  const readResult = JSON.stringify(jsonObj);
-  console.log(readResult);
+    // ファイルを読込み（入力ファイルを文字列へと解読）
+    const jsonText: string = await Utils.readTextFile(file);
 
+    // JSON文字列からJavaScriptオブジェクトを生成
+    const jsObject: Object = JSON.parse(jsonText);
+
+    return jsObject;
   }
 
 }

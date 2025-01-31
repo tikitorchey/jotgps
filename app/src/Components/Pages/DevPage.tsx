@@ -56,14 +56,9 @@ export const DevPage: React.FC<Props> = ({ sampleProp }) => {
     setJottingList([]);
   }
 
-  const onClickImportJSONButton = () => {
-
-    const inputtedFiles = jsonInputRef?.current?.files;
-    if(inputtedFiles && inputtedFiles[0]){
-      const targetJSON: File = inputtedFiles[0];
-      JGEngine.importJSON(targetJSON);
-    }
-
+  const onClickImportJSONButton = async () => {
+    const importedJottings = await JGEngine.importJSON();
+    setJottingList(importedJottings as Array<Jotting>);
   }
 
   const onClickExportJSONButton = () => {
