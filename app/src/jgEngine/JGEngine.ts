@@ -23,29 +23,69 @@ export class JGEngine{
   /**
    * JavaScriptオブジェクトをJSONファイルへ変換し、指定された名前のファイルを端末へダウンロードする処理
    * @param targetData JSONファイルへ変換するJavaScriptオブジェクト
-   * @param fileName 出力するJSONファイルの名前
+   * @param fileName 出力するJSONファイルの名前 拡張子を除いた部分とすること
    */
-  static exportJSON(targetData: Object, fileName: string){
+  static async exportJSON(targetData: Object, fileName: string){
+
+    /** ToDo: ブラウザがFile System APIに対応しているかを確認する処理を追加し整理（ exportJSON_OLDに非対応時の処理を一時定義している）
+     * 例として追加が必要な処理の例を以下に記載
+     *   const supportsFileSystemAccess =
+          "showSaveFilePicker" in window &&
+     */
 
     // JacaScriptオブジェクトをBLOB（JSONファイル）へ変換
     const blob = new Blob([ JSON.stringify(targetData) ], { type: 'application\/json' });
 
-    // BLOBをダウンロードするリンク（URL）を作成
-    /** Warn:
-     *    生成したURLはメモリ内に残存するため、解放処理を実行すること
+    // ファイル出力時のオプションを設定
+    /**
+     * suggestedName  : 出力ファイル名のプレイスホルダー
+     * types          : 出力ファイルの拡張子として許容するもの
      */
-    const url = URL.createObjectURL(blob);
+    const saveOptions: SaveFilePickerOptions = { 
+      suggestedName : `${ fileName }.json`,
+      types         : [ { accept : { "application/json": [ ".json" ] } } ]
+    }
 
-    // HTML aタグのクリックイベントを介してダウンロードを実行
-    const anchorElm = document.createElement("a");              // aタグを生成
-    anchorElm.setAttribute("href", url);                        // aタグのリンク先へ生成したURLを設定
-    anchorElm.setAttribute("download", `${ fileName }.json`);   // ダウンロード実行時のファイル名を設定
-    anchorElm.click();                                          // クリックイベントを発火しダウンロードを実行
+    // 出力先のローカルディレクトリを選択するダイアログを表示
+    /** ToDo: DOMExceptionのエラーハンドリングを実装
+     *    ディレクトリ選択をキャンセルした場合にエラーが発生する
+     */
+    const fileHandle: FileSystemFileHandle = await window.showSaveFilePicker(saveOptions);
 
-    // URLをメモリから解放
-    window.URL.revokeObjectURL(url);
+    // ファイルを出力
+    const fileStream: FileSystemWritableFileStream = await fileHandle.createWritable();
+    await fileStream.write(blob);
+    await fileStream.close();
 
   }
+
+    /**
+   * JavaScriptオブジェクトをJSONファイルへ変換し、指定された名前のファイルを端末へダウンロードする処理
+   * File System Access APIに非対応のブラウザ向けの処理
+   * @param targetData JSONファイルへ変換するJavaScriptオブジェクト
+   * @param fileName 出力するJSONファイルの名前 拡張子を除いた部分とすること
+   */
+    static exportJSON_OLD(targetData: Object, fileName: string){
+
+      // JacaScriptオブジェクトをBLOB（JSONファイル）へ変換
+      const blob = new Blob([ JSON.stringify(targetData) ], { type: 'application\/json' });
+  
+      // BLOBをダウンロードするリンク（URL）を作成
+      /** Warn:
+       *    生成したURLはメモリ内に残存するため、解放処理を実行すること
+       */
+      const url = URL.createObjectURL(blob);
+  
+      // HTML aタグのクリックイベントを介してダウンロードを実行
+      const anchorElm = document.createElement("a");              // aタグを生成
+      anchorElm.setAttribute("href", url);                        // aタグのリンク先へ生成したURLを設定
+      anchorElm.setAttribute("download", `${ fileName }.json`);   // ダウンロード実行時のファイル名を設定
+      anchorElm.click();                                          // クリックイベントを発火しダウンロードを実行
+  
+      // URLをメモリから解放
+      window.URL.revokeObjectURL(url);
+  
+    }
 
   static async importJSON(): Promise<Object>{
 
