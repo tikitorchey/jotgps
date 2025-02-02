@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Button } from "@mui/material";
 import { JGEngine } from "../../jgEngine/JGEngine";
 import { LatLng, Jotter } from "../../jgEngine/Types";
@@ -14,6 +14,9 @@ export const DevPage: React.FC<Props> = ({ sampleProp }) => {
   const [ sampleState,  setSampleState ]  = useState<string>('This is SampleState');
   const [ gpsCoords,    setGPSCoords ]    = useState<LatLng>({ lat: null, lng: null });
   const [ jottingList,  setJottingList ]  = useState<Array<Jotting>>([]);
+
+  // ___ use ref ___ ___ ___ ___ ___
+  // const inputRef = useRef<HTMLInputElement | null>(null);
 
   // ___ use effect ___ ___ ___ ___ ___
   useEffect( () => { console.log(sampleState) }, [ sampleState ] );
@@ -49,6 +52,24 @@ export const DevPage: React.FC<Props> = ({ sampleProp }) => {
 
   }
 
+  const onClickClearJottingListButton = () => {
+    setJottingList([]);
+  }
+
+  const onClickImportJSONButton = async () => {
+    const importedJSON = await JGEngine.importJSON();
+
+    // 
+    const importedJottings = importedJSON as Array<Jotting>
+    /** ToDo: 取得したJSONがJottingのリストとして成立しているか検証する処理を追加 */
+    setJottingList(importedJottings);
+  }
+
+  const onClickExportJSONButton = async () => {
+    const fileName: string = "jotgps";
+    await JGEngine.exportJSON(jottingList, fileName);
+  }
+
   // ___ method ___ ___ ___ ___ ___
   const test = () => {
     console.log('test');
@@ -60,35 +81,54 @@ export const DevPage: React.FC<Props> = ({ sampleProp }) => {
 
       <h2>{ DevPage.name }</h2>
 
-      <Button onClick = { onClickGetGPSCoordsButton }     variant = "outlined" size = "small"> Get GPS Coords </Button>
-      <Button onClick = { onClickAddJottingToListButton } variant = "outlined" size = "small"> Add Jotting To List </Button>
+      {/** 基本機能の開発用 */}
+      <div>
+        <div>
+          <button onClick = { onClickGetGPSCoordsButton }> Get GPS Coords </button>
+        </div>
+        <div>
+          <button onClick = { onClickAddJottingToListButton }> Add Jotting To List </button>
+          <button onClick = { onClickClearJottingListButton }> Clear Jottings List</button>
+        </div>
+        <div>
+          <button onClick = { onClickExportJSONButton }> Export JSON </button>
+        </div>
+        <div>
+          <button onClick = { onClickImportJSONButton }> Import JSON </button>
+        </div>
 
-      {/** 取得したgpsCoordsを表示する */}
-      {/** GPS座標が取得されていない場合、ハイフンを表示する */}
-      <p> { "Lat: " + (gpsCoords?.lat ? gpsCoords?.lat : "-" ) } </p>
-      <p> { "Lng: " + (gpsCoords?.lng ? gpsCoords?.lng : "-" ) } </p>
+        {/** 取得したgpsCoordsを表示する */}
+        {/** GPS座標が取得されていない場合、ハイフンを表示する */}
+        <p> { "Lat: " + (gpsCoords?.lat ? gpsCoords?.lat : "-" ) } </p>
+        <p> { "Lng: " + (gpsCoords?.lng ? gpsCoords?.lng : "-" ) } </p>
 
-      <table>
-        <thead>
-          <tr>
-            <th scope = "col"> ID         </th>
-            <th scope = "col"> Date       </th>
-            <th scope = "col"> Latitude   </th>
-            <th scope = "col"> Longitude  </th>
-          </tr>
-        </thead>
-        <tbody>
-          {/** jottingList内のデータを一覧表示する */}
-          { jottingList.map( (jotting: Jotting) => (
-            <tr key = { jotting.id }>
-              <th scope = "row"> { jotting.id } </th>
-              <th> { (jotting.metaData.date ? jotting.metaData.date : "-" ) } </th>
-              <th> { (jotting.gpsCoords.lat ? jotting.gpsCoords.lat : "-" ) } </th>
-              <th> { (jotting.gpsCoords.lng ? jotting.gpsCoords.lng : "-" ) } </th>
+        <table>
+          <thead>
+            <tr>
+              <th scope = "col"> ID         </th>
+              <th scope = "col"> Date       </th>
+              <th scope = "col"> Latitude   </th>
+              <th scope = "col"> Longitude  </th>
             </tr>
-          )) }
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {/** jottingList内のデータを一覧表示する */}
+            { jottingList.map( (jotting: Jotting) => (
+              <tr key = { jotting.id }>
+                <th scope = "row"> { jotting.id } </th>
+                <th> { (jotting.metaData.date ? jotting.metaData.date : "-" ) } </th>
+                <th> { (jotting.gpsCoords.lat ? jotting.gpsCoords.lat : "-" ) } </th>
+                <th> { (jotting.gpsCoords.lng ? jotting.gpsCoords.lng : "-" ) } </th>
+              </tr>
+            )) }
+          </tbody>
+        </table>
+      </div>
+      
+      {/** IndexedDBの開発用 */}
+      <div>
+
+      </div>
 
     </div>
   );

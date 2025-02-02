@@ -10,5 +10,6 @@
       "allowSyntheticDefaultImports": true,
       "esModuleInterop": true,
       "isolatedModules": true,
+      "types": [ "@types/wicg-file-system-access"]
   }
 }
