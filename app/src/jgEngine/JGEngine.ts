@@ -37,25 +37,12 @@ export class JGEngine{
     const blob = new Blob([ JSON.stringify(targetData) ], { type: 'application\/json' });
 
     // ファイル出力時のオプションを設定
-    /**
-     * suggestedName  : 出力ファイル名のプレイスホルダー
-     * types          : 出力ファイルの拡張子として許容するもの
-     */
     const saveOptions: SaveFilePickerOptions = { 
       suggestedName : `${ fileName }.json`,
       types         : [ { accept : { "application/json": [ ".json" ] } } ]
     }
 
-    // 出力先のローカルディレクトリを選択するダイアログを表示
-    /** ToDo: DOMExceptionのエラーハンドリングを実装
-     *    ディレクトリ選択をキャンセルした場合にエラーが発生する
-     */
-    const fileHandle: FileSystemFileHandle = await window.showSaveFilePicker(saveOptions);
-
-    // ファイルを出力
-    const fileStream: FileSystemWritableFileStream = await fileHandle.createWritable();
-    await fileStream.write(blob);
-    await fileStream.close();
+    Utils.writeBlob(blob, saveOptions);
 
   }
 

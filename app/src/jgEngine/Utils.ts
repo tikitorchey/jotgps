@@ -37,11 +37,32 @@ export class Utils{
      * 
      */
     const arrayBuffer : ArrayBuffer = await file.arrayBuffer();
-    
+
     const textDecoder : TextDecoder = new TextDecoder();
     const text        : string      = textDecoder.decode(arrayBuffer);
 
     return text;
+  }
+
+  /**
+   *  ローカル端末へファイル（Blobデータ）を保存するメソッド
+   * @param blob ファイル
+   * @param saveOptions ファイル出力先ディレクトリを設定するダイアログへ設定するオプション
+   *  - suggestedName  : 出力ファイル名のプレイスホルダー
+      - types          : 出力ファイルとして許容する拡張子
+   */
+  static async writeBlob(blob: Blob, saveOptions: SaveFilePickerOptions): Promise<void>{
+
+    // 出力先のローカルディレクトリを選択するダイアログを表示
+    /** ToDo: DOMExceptionのエラーハンドリングを実装
+     *    ディレクトリ選択をキャンセルした場合にエラーが発生する
+     */
+    const fileHandle: FileSystemFileHandle = await window.showSaveFilePicker(saveOptions);
+
+    // ファイルを出力
+    const fileStream: FileSystemWritableFileStream = await fileHandle.createWritable();
+    await fileStream.write(blob);
+    await fileStream.close();
   }
 
 }
