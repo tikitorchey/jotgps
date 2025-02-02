@@ -74,6 +74,10 @@ export class JGEngine{
   
     }
 
+  /**
+   * JSONファイルを読み込みJavaScriptオブジェクトへ変換し返すメソッド
+   * @returns 
+   */
   static async importJSON(): Promise<Object>{
 
     // ユーザーからの入力ファイルを取得
@@ -83,6 +87,7 @@ export class JGEngine{
     const jsonText: string = await Utils.readTextFile(file);
 
     // JSON文字列からJavaScriptオブジェクトを生成
+    /** ToDo: JSONとして成立しているファイルか検証する処理を追加 */
     const jsObject: Object = JSON.parse(jsonText);
 
     return jsObject;
