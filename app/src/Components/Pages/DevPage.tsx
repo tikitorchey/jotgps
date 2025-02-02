@@ -16,7 +16,7 @@ export const DevPage: React.FC<Props> = ({ sampleProp }) => {
   const [ jottingList,  setJottingList ]  = useState<Array<Jotting>>([]);
 
   // ___ use ref ___ ___ ___ ___ ___
-  const jsonInputRef = useRef<HTMLInputElement | null>(null);
+  // const inputRef = useRef<HTMLInputElement | null>(null);
 
   // ___ use effect ___ ___ ___ ___ ___
   useEffect( () => { console.log(sampleState) }, [ sampleState ] );
@@ -61,9 +61,9 @@ export const DevPage: React.FC<Props> = ({ sampleProp }) => {
     setJottingList(importedJottings as Array<Jotting>);
   }
 
-  const onClickExportJSONButton = () => {
-    const fileName: string = "sample";
-    JGEngine.exportJSON(jottingList, fileName);
+  const onClickExportJSONButton = async () => {
+    const fileName: string = "jotgps";
+    await JGEngine.exportJSON(jottingList, fileName);
   }
 
   // ___ method ___ ___ ___ ___ ___
@@ -88,7 +88,6 @@ export const DevPage: React.FC<Props> = ({ sampleProp }) => {
         <button onClick = { onClickExportJSONButton }> Export JSON </button>
       </div>
       <div>
-        <input ref = { jsonInputRef } type = "file" accept = ".json"/>
         <button onClick = { onClickImportJSONButton }> Import JSON </button>
       </div>
 
