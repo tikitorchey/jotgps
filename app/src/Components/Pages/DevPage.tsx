@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Button } from "@mui/material";
 import { JGEngine } from "../../jgEngine/JGEngine";
 import { LatLng, Jotter } from "../../jgEngine/Types";
-import { Jotting } from "../../jgEngine/Models/Jotting";
+import { Jotting } from "../../jgEngine/models/Jotting";
 
 type Props = {
   sampleProp ?: any;
