@@ -1,5 +1,5 @@
 import { ulid } from "ulid";
-import { LatLng } from "../Types" 
+import { LatLng } from "../types";
 
 // GPS座標のレコードおよび周辺情報を集約するクラス
 export class Jotting{
@@ -49,3 +49,5 @@ export class Jotting{
   }
   
 }
+
+export default Jotting;

@@ -1,5 +1,5 @@
-import Utils from "./Utils";
-import UtilsForDB from "./UtilsForDB";
+import Utils from "./utils";
+import IDBHandler from "./dataPerpetuations/iDBHandler";
 
 export class JGEngine{
 
@@ -100,7 +100,7 @@ export class JGEngine{
       console.log(obj);
     }
 
-    const db = await UtilsForDB.dbTest(dbManipulateFunc);
+    const db = await IDBHandler.dbTest(dbManipulateFunc);
 
   }
 

@@ -1,4 +1,4 @@
-export class UtilsForDB{
+export class IDBHandler{
 
   /** ToDo:
    * Utilsというクラスおよびフォルダは利用目的が判然としないため、
@@ -61,4 +61,4 @@ export class UtilsForDB{
   }
 }
 
-export default UtilsForDB;
+export default IDBHandler;
