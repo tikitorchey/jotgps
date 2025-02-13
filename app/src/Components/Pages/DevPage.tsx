@@ -57,17 +57,18 @@ export const DevPage: React.FC<Props> = ({ sampleProp }) => {
   }
 
   const onClickImportJSONButton = async () => {
-    const importedJSON = await JGEngine.importJSON();
-
-    // 
-    const importedJottings = importedJSON as Array<Jotting>
-    /** ToDo: 取得したJSONがJottingのリストとして成立しているか検証する処理を追加 */
+    const importedJSON      = await JGEngine.importJSON();
+    const importedJottings  = importedJSON as Array<Jotting>;
     setJottingList(importedJottings);
   }
 
   const onClickExportJSONButton = async () => {
     const fileName: string = "jotgps";
     await JGEngine.exportJSON(jottingList, fileName);
+  }
+
+  const onClickDBTestButton = async () => {
+    JGEngine.dbTest();
   }
 
   // ___ method ___ ___ ___ ___ ___
@@ -88,7 +89,7 @@ export const DevPage: React.FC<Props> = ({ sampleProp }) => {
         </div>
         <div>
           <button onClick = { onClickAddJottingToListButton }> Add Jotting To List </button>
-          <button onClick = { onClickClearJottingListButton }> Clear Jottings List</button>
+          <button onClick = { onClickClearJottingListButton }> Clear Jottings List </button>
         </div>
         <div>
           <button onClick = { onClickExportJSONButton }> Export JSON </button>
@@ -127,7 +128,7 @@ export const DevPage: React.FC<Props> = ({ sampleProp }) => {
       
       {/** IndexedDBの開発用 */}
       <div>
-
+        <button onClick = { onClickDBTestButton }> DB Test </button>
       </div>
 
     </div>

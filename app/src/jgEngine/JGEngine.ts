@@ -1,4 +1,5 @@
 import Utils from "./Utils";
+import UtilsForDB from "./UtilsForDB";
 
 export class JGEngine{
 
@@ -21,7 +22,7 @@ export class JGEngine{
   }
 
   /**
-   * JavaScriptオブジェクトをJSONファイルへ変換し、指定された名前のファイルを端末へダウンロードする処理
+   * JavaScriptオブジェクトをJSONファイルへ変換し、指定された名前のファイルを端末へダウンロードするメソッド
    * @param targetData JSONファイルへ変換するJavaScriptオブジェクト
    * @param fileName 出力するJSONファイルの名前 拡張子を除いた部分とすること
    */
@@ -47,7 +48,7 @@ export class JGEngine{
   }
 
     /**
-   * JavaScriptオブジェクトをJSONファイルへ変換し、指定された名前のファイルを端末へダウンロードする処理
+   * JavaScriptオブジェクトをJSONファイルへ変換し、指定された名前のファイルを端末へダウンロードするメソッド
    * File System Access APIに非対応のブラウザ向けの処理
    * @param targetData JSONファイルへ変換するJavaScriptオブジェクト
    * @param fileName 出力するJSONファイルの名前 拡張子を除いた部分とすること
@@ -91,6 +92,16 @@ export class JGEngine{
     const jsObject: Object = JSON.parse(jsonText);
 
     return jsObject;
+  }
+
+  static async dbTest(){
+
+    const dbManipulateFunc = (obj: IDBDatabase) => {
+      console.log(obj);
+    }
+
+    const db = await UtilsForDB.dbTest(dbManipulateFunc);
+
   }
 
 }
