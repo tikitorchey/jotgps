@@ -1,40 +1,47 @@
-export class IDBHandler{
+import IDB_SCHEMA from "./iDBSchema";
 
-  /** ToDo:
-   * Utilsというクラスおよびフォルダは利用目的が判然としないため、
-   * 避けることが望ましい。要改修。
-   */
+export class IDBHandler{
 
   constructor(){
 
   }
 
-  static async dbTest(dbManipulateFunc: (iDB: IDBDatabase) => void){
-
-    // 参考： https://qiita.com/tanimoto-hikari/items/5fd81962153531e8275e
-    const DB_NAME           : string = 'test';
-    const DB_VERSION        : number = 1;
-    const DB_STORE_JOTTING  : string = "jotting";
+  static async manipulate(manipulateFunc: (iDB: IDBDatabase) => void){
 
     try {
 
       // DB接続リクエストを実行および接続情報を取得
-      const request: IDBOpenDBRequest = window.indexedDB.open(DB_NAME, DB_VERSION);
+      const request: IDBOpenDBRequest = window.indexedDB.open(IDB_SCHEMA.DB_NAME, IDB_SCHEMA.DB_VERSION);
 
       // イベントハンドラ（テーブル要更新時≒初期化用）を登録
-      /** 本イベントが実行される場合は以下
-       *    - データベースが作成されていない場合
-       *    - テーブルのバージョンが指定よりも古い場合
+      /** 本イベントは以下のケースに合致する場合に実行される
+       *    - DBが存在しない状況で、open要求された場合
+       *    - DBが存在するものの、open要求時に指定バージョンが存在しない場合
+       */
+      /** Policy:
+       *    DB操作時は都度onupgradeneededイベント実行の必要性チェックを行う処理フローとすること
+       *    同一セッション内でチェックを繰り返すことになり過剰ではあるが、最新バージョンであることを保証するために容認する
        */
       request.onupgradeneeded = (event: IDBVersionChangeEvent) => {
 
-        const iDBRequest  = event.target      as IDBRequest;
-        const iDB         = iDBRequest.result as IDBDatabase;
+        const iDBRequest  : IDBRequest  = event.target      as IDBRequest;
+        const iDB         : IDBDatabase = iDBRequest.result as IDBDatabase;
 
-        // オブジェクトストア（≒テーブル）が存在しない場合は新規作成
-        if (!iDB.objectStoreNames.contains(DB_STORE_JOTTING)) {
-          iDB.createObjectStore(DB_STORE_JOTTING, { keyPath: 'id' });
-        }
+        // DBのストア定義情報をもとに各ストアをセットアップ
+        IDB_SCHEMA.STORE.map( (objectStoreInfo) => {
+
+          const name    :string = objectStoreInfo.NAME;
+          const keyPath :string = objectStoreInfo.KEY_PATH;
+
+          // 指定バージョンのDBに、指定された名前のオブジェクトストアが存在するかチェック
+          const isExists: boolean = iDB.objectStoreNames.contains(name);
+          // 存在しない場合は、オブジェクトストアを新規作成
+          if(!isExists){
+            iDB.createObjectStore(name, { keyPath: keyPath });
+            console.log(`Object Store "${ name }" is created.`);
+          }
+
+        });
 
       };
 
@@ -43,7 +50,7 @@ export class IDBHandler{
 
         const iDBRequest  = event.target      as IDBRequest;
         const iDB         = iDBRequest.result as IDBDatabase;
-        dbManipulateFunc(iDB);
+        manipulateFunc(iDB);
         
       };
 

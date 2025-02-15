@@ -96,11 +96,11 @@ export class JGEngine{
 
   static async dbTest(){
 
-    const dbManipulateFunc = (obj: IDBDatabase) => {
+    const manipulateFunc = (obj: IDBDatabase) => {
       console.log(obj);
     }
 
-    const db = await IDBHandler.dbTest(dbManipulateFunc);
+    const db = await IDBHandler.manipulate(manipulateFunc);
 
   }
 
