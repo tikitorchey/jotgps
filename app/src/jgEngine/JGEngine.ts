@@ -1,5 +1,6 @@
 import Utils from "./utils";
 import IDBHandler from "./dataPerpetuations/iDBHandler";
+import Jotting from "./models/jotting";
 
 export class JGEngine{
 
@@ -94,13 +95,47 @@ export class JGEngine{
     return jsObject;
   }
 
-  static async dbTest(){
-
-    const manipulateFunc = (obj: IDBDatabase) => {
-      console.log(obj);
+  static async iDBTest(){
+    const manipulateFunc = (iDB: IDBDatabase) => {
+      console.log(iDB);
     }
+    await IDBHandler.manipulate(manipulateFunc);
+  }
 
-    const db = await IDBHandler.manipulate(manipulateFunc);
+  static async iDBSaveTest(jottingToSave: Jotting){
+
+    const manipulateFunc = (iDB: IDBDatabase) => {
+
+      const TARGET_STORE_NAME : string              = "jotting";
+      const TRANSACTION_MODE  : IDBTransactionMode  = "readwrite";
+
+      // トランザクションを開始 アクセス対象のストアを指定
+      const transaction: IDBTransaction = iDB.transaction(TARGET_STORE_NAME, TRANSACTION_MODE);
+
+      // アクセス対象のストアを取得
+      const store: IDBObjectStore = transaction.objectStore(TARGET_STORE_NAME);
+
+      //  トランザクションを実行
+      /** Memo: addとputの違い
+       *    iDBへのデータ保存メソッドにはaddとputが存在する
+       *    同一のキーのデータが既に存在する場合、addはエラーとして保存を拒否する
+       *    一方でputは新規データで上書きを行う
+       */
+      const iDBRequest: IDBRequest = store.add(jottingToSave);
+      
+      iDBRequest.onsuccess = () => {
+        console.log("Jotting added to the store", iDBRequest.result);
+      };
+      
+      iDBRequest.onerror = () => {
+        const error: DOMException | null = iDBRequest.error;
+        console.log("Error", iDBRequest.error);
+        throw (error);
+      };
+
+    }
+    
+    await IDBHandler.manipulate(manipulateFunc);
 
   }
 

@@ -68,7 +68,13 @@ export const DevPage: React.FC<Props> = ({ sampleProp }) => {
   }
 
   const onClickDBTestButton = async () => {
-    JGEngine.dbTest();
+    JGEngine.iDBTest();
+  }
+
+  const onClickDBSaveTestButton = async () => {
+    jottingList.map((jotting) => {
+      JGEngine.iDBSaveTest(jotting);
+    });
   }
 
   // ___ method ___ ___ ___ ___ ___
@@ -129,6 +135,7 @@ export const DevPage: React.FC<Props> = ({ sampleProp }) => {
       {/** IndexedDBの開発用 */}
       <div>
         <button onClick = { onClickDBTestButton }> DB Test </button>
+        <button onClick = { onClickDBSaveTestButton }> DB Save Test </button>
       </div>
 
     </div>
