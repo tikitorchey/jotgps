@@ -12,6 +12,7 @@ export const IDB_SCHEMA: IDBSchema = {
     }
   ]
 };
+export type StoreName = "jotting" | "jotter";
 
 type IDBSchema = {
   "DB_NAME"     : string,
@@ -23,5 +24,7 @@ type StoreInfo = {
   "NAME"      : string,
   "KEY_PATH"  : string
 }
+
+
 
 export default IDB_SCHEMA;
