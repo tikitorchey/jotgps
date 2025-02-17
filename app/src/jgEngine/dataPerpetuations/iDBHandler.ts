@@ -93,7 +93,15 @@ export class IDBHandler{
       dataToSave.forEach((data) => {
 
         // トランザクションを実行
-        const request: IDBRequest = store.add(data);
+        /** Policy: データ重複時の対応
+         *    既存のデータと競合した場合は、UIにセットされているデータを正として扱い、これで上書きをする
+         */
+        /** Memo: addとputの違い
+         *    iDBへのデータ保存メソッドにはaddとputが存在する
+         *    同一のキーのデータが既に存在する場合、addはエラーとして保存を拒否する
+         *    一方でputは新規データで上書きする
+         */
+        const request: IDBRequest = store.put(data);
 
         // イベントハンドラ（add成功時）を登録
         request.onsuccess = (event) => {
