@@ -96,14 +96,23 @@ export class JGEngine{
   }
 
   static iDBTest(){
-    const manipulateFunc = (iDB: IDBDatabase) => {
+    /**
+    const successCallback = (iDB: IDBDatabase) => {
       console.log(iDB);
     }
-    IDBHandler.manipulate(manipulateFunc);
+    IDBHandler.manipulate(successCallback);
+     */
   }
 
-  static iDBSaveTest(jottingToSave: Jotting){
-    IDBHandler.save("jotting", jottingToSave);
+  static iDBCreateTest(jottingToSave: Array<Jotting>){
+    IDBHandler.createRecords("jotting", jottingToSave);
+  }
+
+  static iDBReadTest(){
+    const successCallback = (data: any) => {
+      console.log(data);
+    }
+    IDBHandler.readAllRecords("jotting", successCallback);
   }
 
 }

@@ -72,10 +72,13 @@ export const DevPage: React.FC<Props> = ({ sampleProp }) => {
   }
 
   const onClickDBSaveTestButton = async () => {
-    jottingList.map((jotting) => {
-      JGEngine.iDBSaveTest(jotting);
-    });
+    JGEngine.iDBCreateTest(jottingList);
   }
+
+  const onClickDBReadTestButton = async () => {
+    JGEngine.iDBReadTest();
+  }
+
 
   // ___ method ___ ___ ___ ___ ___
   const test = () => {
@@ -136,6 +139,7 @@ export const DevPage: React.FC<Props> = ({ sampleProp }) => {
       <div>
         <button onClick = { onClickDBTestButton }> DB Test </button>
         <button onClick = { onClickDBSaveTestButton }> DB Save Test </button>
+        <button onClick = { onClickDBReadTestButton }> DB Read Test </button>
       </div>
 
     </div>
