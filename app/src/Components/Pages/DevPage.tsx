@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Button } from "@mui/material";
+import { Button, Box, Card, CardContent, Typography, CardActions, CardActionArea } from "@mui/material";
+import { Table, TableBody, TableCell, TableRow } from "@mui/material";
 import { JGEngine } from "../../jgEngine/jgEngine";
 import { LatLng, Jotter } from "../../jgEngine/types";
 import { Jotting } from "../../jgEngine/models/jotting";
@@ -97,24 +98,56 @@ export const DevPage: React.FC<Props> = ({ sampleProp }) => {
 
       {/** 基本機能の開発用 */}
       <div>
-        <div>
-          <button onClick = { onClickGetGPSCoordsButton }> Get GPS Coords </button>
-        </div>
+
+        {/** Geolocation APIの開発用 */}
+        <Card variant = "outlined">
+
+          <CardContent>
+
+            <CardActionArea onClick = { onClickGetGPSCoordsButton }>
+              <Typography variant = "h5" component = "div">
+                Get GPS Coordinates
+              </Typography>
+              <Typography variant = "body2" sx = {{ color: 'text.secondary' }}>
+                Get the location coordinates of the device from the browser's geolocation API.
+              </Typography>
+            </CardActionArea>
+
+            <CardContent>
+              {/** 取得したgpsCoordsを表示する */}
+              {/** GPS座標が取得されていない場合、ハイフンを表示する */}
+              <Table>
+                <TableBody>
+                  <TableRow>
+                    <TableCell> Latitude </TableCell>
+                    <TableCell> { (gpsCoords?.lat ? gpsCoords?.lat : "-" ) } </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell> Longitude </TableCell>
+                    <TableCell> { (gpsCoords?.lng ? gpsCoords?.lng : "-" ) } </TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </CardContent>
+
+          </CardContent>
+
+        </Card>
+
+
         <div>
           <button onClick = { onClickAddJottingToListButton }> Add Jotting To List </button>
           <button onClick = { onClickClearJottingListButton }> Clear Jottings List </button>
         </div>
+
+
+
         <div>
           <button onClick = { onClickExportJSONButton }> Export JSON </button>
         </div>
         <div>
           <button onClick = { onClickImportJSONButton }> Import JSON </button>
         </div>
-
-        {/** 取得したgpsCoordsを表示する */}
-        {/** GPS座標が取得されていない場合、ハイフンを表示する */}
-        <p> { "Lat: " + (gpsCoords?.lat ? gpsCoords?.lat : "-" ) } </p>
-        <p> { "Lng: " + (gpsCoords?.lng ? gpsCoords?.lng : "-" ) } </p>
 
         <table>
           <thead>
