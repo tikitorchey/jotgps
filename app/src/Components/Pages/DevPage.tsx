@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Button, Box, Card, CardContent, Typography, CardActions, CardActionArea } from "@mui/material";
-import { Table, TableBody, TableCell, TableRow } from "@mui/material";
+import { Button, Box, Card, CardContent, Typography, CardActions, CardActionArea, Grid2 } from "@mui/material";
+import { Table, TableBody, TableCell, TableRow, TableHead } from "@mui/material";
 import { JGEngine } from "../../jgEngine/jgEngine";
 import { LatLng, Jotter } from "../../jgEngine/types";
 import { Jotting } from "../../jgEngine/models/jotting";
@@ -97,88 +97,106 @@ export const DevPage: React.FC<Props> = ({ sampleProp }) => {
       <h2>{ DevPage.name }</h2>
 
       {/** 基本機能の開発用 */}
-      <div>
+      <Grid2 container spacing = { 2 }>
 
-        {/** Geolocation APIの開発用 */}
-        <Card variant = "outlined">
+        {/** UI State */}
+        <Grid2 size = { 12 }>
+          <Card variant = "outlined">
 
-          <CardContent>
+            <Table>
 
-            <CardActionArea onClick = { onClickGetGPSCoordsButton }>
-              <Typography variant = "h5" component = "div">
-                Get GPS Coordinates
-              </Typography>
-              <Typography variant = "body2" sx = {{ color: 'text.secondary' }}>
-                Get the location coordinates of the device from the browser's geolocation API.
-              </Typography>
-            </CardActionArea>
+              <TableHead>
+                <TableRow>
+                  <TableCell> ID         </TableCell>
+                  <TableCell> Date       </TableCell>
+                  <TableCell> Latitude   </TableCell>
+                  <TableCell> Longitude  </TableCell>
+                </TableRow>
+              </TableHead>
+
+              <TableBody>
+                {/** jottingList内のデータを一覧表示する */}
+                { jottingList.map( (jotting: Jotting) => (
+                  <TableRow key = { jotting.id }>
+                    <TableCell> { jotting.id }                                              </TableCell>
+                    <TableCell> { (jotting.metaData.date ? jotting.metaData.date : "-" ) }  </TableCell>
+                    <TableCell> { (jotting.gpsCoords.lat ? jotting.gpsCoords.lat : "-" ) }  </TableCell>
+                    <TableCell> { (jotting.gpsCoords.lng ? jotting.gpsCoords.lng : "-" ) }  </TableCell>
+                  </TableRow>
+                )) }
+              </TableBody>
+
+            </Table>
+
+          </Card>
+        </Grid2>
+
+        <Grid2>
+
+          {/** Geolocation APIの開発用 */}
+          <Card variant = "outlined">
 
             <CardContent>
-              {/** 取得したgpsCoordsを表示する */}
-              {/** GPS座標が取得されていない場合、ハイフンを表示する */}
-              <Table>
-                <TableBody>
-                  <TableRow>
-                    <TableCell> Latitude </TableCell>
-                    <TableCell> { (gpsCoords?.lat ? gpsCoords?.lat : "-" ) } </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell> Longitude </TableCell>
-                    <TableCell> { (gpsCoords?.lng ? gpsCoords?.lng : "-" ) } </TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
+
+              <CardActionArea onClick = { onClickGetGPSCoordsButton }>
+                <Typography variant = "h5" component = "div">
+                  Get GPS Coordinates
+                </Typography>
+                <Typography variant = "body2" sx = {{ color: 'text.secondary' }}>
+                  Get the location coordinates of the device from the browser's geolocation API.
+                </Typography>
+              </CardActionArea>
+
+              <CardContent>
+                {/** 取得したgpsCoordsを表示する */}
+                {/** GPS座標が取得されていない場合、ハイフンを表示する */}
+                <Table>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell> Latitude </TableCell>
+                      <TableCell> { (gpsCoords?.lat ? gpsCoords?.lat : "-" ) } </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell> Longitude </TableCell>
+                      <TableCell> { (gpsCoords?.lng ? gpsCoords?.lng : "-" ) } </TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </CardContent>
+
             </CardContent>
 
-          </CardContent>
+          </Card>
 
-        </Card>
+        </Grid2>
 
+        <Grid2>
+          <Card variant = "outlined">
+            <CardContent>
+              <button onClick = { onClickAddJottingToListButton }> Add Jotting To List </button>
+              <button onClick = { onClickClearJottingListButton }> Clear Jottings List </button>
+            </CardContent>
+          </Card>
+        </Grid2>
 
-        <div>
-          <button onClick = { onClickAddJottingToListButton }> Add Jotting To List </button>
-          <button onClick = { onClickClearJottingListButton }> Clear Jottings List </button>
-        </div>
+        <Grid2>
+          <Card variant = "outlined">
+            <button onClick = { onClickExportJSONButton }> Export JSON </button>
+            <button onClick = { onClickImportJSONButton }> Import JSON </button>
+          </Card>
+        </Grid2>
 
-
-
-        <div>
-          <button onClick = { onClickExportJSONButton }> Export JSON </button>
-        </div>
-        <div>
-          <button onClick = { onClickImportJSONButton }> Import JSON </button>
-        </div>
-
-        <table>
-          <thead>
-            <tr>
-              <th scope = "col"> ID         </th>
-              <th scope = "col"> Date       </th>
-              <th scope = "col"> Latitude   </th>
-              <th scope = "col"> Longitude  </th>
-            </tr>
-          </thead>
-          <tbody>
-            {/** jottingList内のデータを一覧表示する */}
-            { jottingList.map( (jotting: Jotting) => (
-              <tr key = { jotting.id }>
-                <th scope = "row"> { jotting.id } </th>
-                <th> { (jotting.metaData.date ? jotting.metaData.date : "-" ) } </th>
-                <th> { (jotting.gpsCoords.lat ? jotting.gpsCoords.lat : "-" ) } </th>
-                <th> { (jotting.gpsCoords.lng ? jotting.gpsCoords.lng : "-" ) } </th>
-              </tr>
-            )) }
-          </tbody>
-        </table>
-      </div>
+      </Grid2>
       
       {/** IndexedDBの開発用 */}
-      <div>
-        <button onClick = { onClickDBTestButton }> DB Test </button>
-        <button onClick = { onClickDBSaveTestButton }> DB Save Test </button>
-        <button onClick = { onClickDBReadAllTestButton }> DB Read All Test </button>
-        <button onClick = { onClickDBReadTargetTestButton }> DB Read Target Test </button>
-      </div>
+      <Grid2 container spacing = { 2 }>
+        <Card variant = "outlined">
+          <button onClick = { onClickDBTestButton }> DB Test </button>
+          <button onClick = { onClickDBSaveTestButton }> DB Save Test </button>
+          <button onClick = { onClickDBReadAllTestButton }> DB Read All Test </button>
+          <button onClick = { onClickDBReadTargetTestButton }> DB Read Target Test </button>
+        </Card>
+      </Grid2>
 
     </div>
   );
