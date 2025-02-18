@@ -132,8 +132,13 @@ export class IDBHandler{
 
   }
 
+  /**
+   * 
+   * @param targetStoreName 
+   * @param successCallback レコードの取得が成功した際に実行されるコールバック関数
+   */
   static async readAllRecords(targetStoreName: StoreName,
-    successCallback: (data: any, ...params: Array<any>) => void){
+    successCallback: (data: any) => void){
 
     /**
      * レコード取得が全件終了した際（transaction.oncomplete時）に、引数として入力されたコールバック関数を実行する
@@ -150,21 +155,21 @@ export class IDBHandler{
       // アクセス対象のストアを取得
       const store: IDBObjectStore = transaction.objectStore(targetStoreName);
 
-        //  トランザクションを実行
-        const request: IDBRequest = store.getAll();
-        
-        // イベントハンドラ（get成功時）を登録
-        request.onsuccess = (event: Event) => {
-          const iDBRequest  = event.target      as IDBRequest;
-          const data        = iDBRequest.result as IDBDatabase;
-          successCallback(data);
-        };
-        
-        // イベントハンドラ（get失敗時）を登録
-        request.onerror = (event: Event) => {
-          const error: DOMException | null = request.error;
-          console.log("Error: ", error);
-        };
+      //  トランザクションを実行
+      const request: IDBRequest = store.getAll();
+      
+      // イベントハンドラ（get成功時）を登録
+      request.onsuccess = (event: Event) => {
+        const iDBRequest  = event.target      as IDBRequest;
+        const data        = iDBRequest.result as Array<any>;
+        successCallback(data);
+      };
+      
+      // イベントハンドラ（get失敗時）を登録
+      request.onerror = (event: Event) => {
+        const error: DOMException | null = request.error;
+        console.log("Error: ", error);
+      };
 
       // イベントハンドラ（トランザクションが完了時）を登録
       transaction.oncomplete = (event: Event) => {
@@ -182,8 +187,16 @@ export class IDBHandler{
 
   }
   
+  /**
+   * 指定したオブジェクトストアから、指定したキーに合致するレコードを取得するメソッド
+   * 取得結果をコールバック関数へ渡したうえで実行する
+   * 合致するレコードが存在しない場合は空配列をコールバック関数へ渡す
+   * @param targetStoreName 
+   * @param targetKeys 
+   * @param successCallback 
+   */
   static async readTargetRecordsByKey(targetStoreName: StoreName, targetKeys: Array<string>, 
-    successCallback: (data: any, ...params: Array<any>) => void){
+    successCallback: (data: Array<any>) => void){
 
     /**
      * レコード取得が全件終了した際（transaction.oncomplete時）に、引数として入力されたコールバック関数を実行する
@@ -209,8 +222,10 @@ export class IDBHandler{
         // イベントハンドラ（get成功時）を登録
         request.onsuccess = (event: Event) => {
           const iDBRequest  = event.target      as IDBRequest;
-          const data        = iDBRequest.result as IDBDatabase;
-          records.push(data);
+          const data        = iDBRequest.result as any;
+          if(data){               // データが存在する場合のみレコードを格納
+            records.push(data);   // 存在しない場合はリクエスト結果がundefinedで返り、undefinedを配列に保存してしまう
+          }
         };
         
         // イベントハンドラ（get失敗時）を登録

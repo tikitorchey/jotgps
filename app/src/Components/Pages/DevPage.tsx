@@ -76,11 +76,11 @@ export const DevPage: React.FC<Props> = ({ sampleProp }) => {
   }
 
   const onClickDBReadAllTestButton = async () => {
-    JGEngine.iDBReadAllTest();
+    JGEngine.iDBReadAllTest(setJottingList);
   }
 
   const onClickDBReadTargetTestButton = async () => {
-    JGEngine.iDBReadTargetTest();
+    JGEngine.iDBReadTargetTest(setJottingList);
   }
 
 

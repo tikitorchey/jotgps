@@ -108,17 +108,17 @@ export class JGEngine{
     IDBHandler.createRecords("jotting", jottingToSave);
   }
 
-  static iDBReadAllTest(){
+  static iDBReadAllTest(func: (data: any) => void){
     const successCallback = (data: any) => {
-      console.log(data);
+      func(data);
     }
     IDBHandler.readAllRecords("jotting", successCallback);
   }
 
-  static iDBReadTargetTest(){
+  static iDBReadTargetTest(func: (data: any) => void){
     const TARGET_KEYS = ["01JMC2RCVXYPBVVWP824Q46HJZ"];
     const successCallback = (data: any) => {
-      console.log(data);
+      func(data);
     }
     IDBHandler.readTargetRecordsByKey("jotting", TARGET_KEYS, successCallback);
   }
