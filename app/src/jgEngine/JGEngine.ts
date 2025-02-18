@@ -1,4 +1,6 @@
-import Utils from "./Utils";
+import Utils from "./utils";
+import IDBHandler from "./dataPerpetuations/iDBHandler";
+import Jotting from "./models/jotting";
 
 export class JGEngine{
 
@@ -21,7 +23,7 @@ export class JGEngine{
   }
 
   /**
-   * JavaScriptオブジェクトをJSONファイルへ変換し、指定された名前のファイルを端末へダウンロードする処理
+   * JavaScriptオブジェクトをJSONファイルへ変換し、指定された名前のファイルを端末へダウンロードするメソッド
    * @param targetData JSONファイルへ変換するJavaScriptオブジェクト
    * @param fileName 出力するJSONファイルの名前 拡張子を除いた部分とすること
    */
@@ -47,7 +49,7 @@ export class JGEngine{
   }
 
     /**
-   * JavaScriptオブジェクトをJSONファイルへ変換し、指定された名前のファイルを端末へダウンロードする処理
+   * JavaScriptオブジェクトをJSONファイルへ変換し、指定された名前のファイルを端末へダウンロードするメソッド
    * File System Access APIに非対応のブラウザ向けの処理
    * @param targetData JSONファイルへ変換するJavaScriptオブジェクト
    * @param fileName 出力するJSONファイルの名前 拡張子を除いた部分とすること
@@ -91,6 +93,34 @@ export class JGEngine{
     const jsObject: Object = JSON.parse(jsonText);
 
     return jsObject;
+  }
+
+  static iDBTest(){
+    /**
+    const successCallback = (iDB: IDBDatabase) => {
+      console.log(iDB);
+    }
+    IDBHandler.manipulate(successCallback);
+     */
+  }
+
+  static iDBCreateTest(jottingToSave: Array<Jotting>){
+    IDBHandler.createRecords("jotting", jottingToSave);
+  }
+
+  static iDBReadAllTest(func: (data: any) => void){
+    const successCallback = (data: any) => {
+      func(data);
+    }
+    IDBHandler.readAllRecords("jotting", successCallback);
+  }
+
+  static iDBReadTargetTest(func: (data: any) => void){
+    const TARGET_KEYS = ["01JMC2RCVXYPBVVWP824Q46HJZ"];
+    const successCallback = (data: any) => {
+      func(data);
+    }
+    IDBHandler.readTargetRecordsByKey("jotting", TARGET_KEYS, successCallback);
   }
 
 }
