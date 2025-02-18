@@ -75,8 +75,12 @@ export const DevPage: React.FC<Props> = ({ sampleProp }) => {
     JGEngine.iDBCreateTest(jottingList);
   }
 
-  const onClickDBReadTestButton = async () => {
-    JGEngine.iDBReadTest();
+  const onClickDBReadAllTestButton = async () => {
+    JGEngine.iDBReadAllTest();
+  }
+
+  const onClickDBReadTargetTestButton = async () => {
+    JGEngine.iDBReadTargetTest();
   }
 
 
@@ -139,7 +143,8 @@ export const DevPage: React.FC<Props> = ({ sampleProp }) => {
       <div>
         <button onClick = { onClickDBTestButton }> DB Test </button>
         <button onClick = { onClickDBSaveTestButton }> DB Save Test </button>
-        <button onClick = { onClickDBReadTestButton }> DB Read Test </button>
+        <button onClick = { onClickDBReadAllTestButton }> DB Read All Test </button>
+        <button onClick = { onClickDBReadTargetTestButton }> DB Read Target Test </button>
       </div>
 
     </div>

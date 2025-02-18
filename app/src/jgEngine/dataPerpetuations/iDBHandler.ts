@@ -133,7 +133,12 @@ export class IDBHandler{
   }
 
   static async readAllRecords(targetStoreName: StoreName,
-    successCallback: (iDB: IDBDatabase, ...params: Array<any>) => void){
+    successCallback: (data: any, ...params: Array<any>) => void){
+
+    /**
+     * レコード取得が全件終了した際（transaction.oncomplete時）に、引数として入力されたコールバック関数を実行する
+     * その際、コールバック関数に対してレコードを格納した配列型オブジェクトを注入する
+     */
 
     const TRANSACTION_MODE: IDBTransactionMode  = "readonly";    // 読み取り操作の場合はreadonlyモードで固定
 
@@ -145,21 +150,21 @@ export class IDBHandler{
       // アクセス対象のストアを取得
       const store: IDBObjectStore = transaction.objectStore(targetStoreName);
 
-      //  トランザクションを実行
-      const request: IDBRequest = store.getAll();
-      
-      // イベントハンドラ（get成功時）を登録
-      request.onsuccess = (event: Event) => {
-        const iDBRequest  = event.target      as IDBRequest;
-        const data        = iDBRequest.result as IDBDatabase;
-        successCallback(data);
-      };
-      
-      // イベントハンドラ（get失敗時）を登録
-      request.onerror = (event: Event) => {
-        const error: DOMException | null = request.error;
-        console.log("Error: ", error);
-      };
+        //  トランザクションを実行
+        const request: IDBRequest = store.getAll();
+        
+        // イベントハンドラ（get成功時）を登録
+        request.onsuccess = (event: Event) => {
+          const iDBRequest  = event.target      as IDBRequest;
+          const data        = iDBRequest.result as IDBDatabase;
+          successCallback(data);
+        };
+        
+        // イベントハンドラ（get失敗時）を登録
+        request.onerror = (event: Event) => {
+          const error: DOMException | null = request.error;
+          console.log("Error: ", error);
+        };
 
       // イベントハンドラ（トランザクションが完了時）を登録
       transaction.oncomplete = (event: Event) => {
@@ -177,6 +182,62 @@ export class IDBHandler{
 
   }
   
+  static async readTargetRecordsByKey(targetStoreName: StoreName, targetKeys: Array<string>, 
+    successCallback: (data: any, ...params: Array<any>) => void){
+
+    /**
+     * レコード取得が全件終了した際（transaction.oncomplete時）に、引数として入力されたコールバック関数を実行する
+     * その際、コールバック関数に対してレコードを格納した配列型オブジェクトを注入する
+     */
+
+    const TRANSACTION_MODE: IDBTransactionMode  = "readonly";    // 読み取り操作の場合はreadonlyモードで固定
+
+    const readCallback = (iDB: IDBDatabase) => {
+
+      // トランザクションを開始 アクセス対象のストアを指定
+      const transaction: IDBTransaction = iDB.transaction(targetStoreName, TRANSACTION_MODE);
+
+      // アクセス対象のストアを取得
+      const store: IDBObjectStore = transaction.objectStore(targetStoreName);
+
+      const records: Array<any> = [];
+      targetKeys.forEach( (key: string) => {
+
+        //  トランザクションを実行
+        const request: IDBRequest = store.get(key);
+
+        // イベントハンドラ（get成功時）を登録
+        request.onsuccess = (event: Event) => {
+          const iDBRequest  = event.target      as IDBRequest;
+          const data        = iDBRequest.result as IDBDatabase;
+          records.push(data);
+        };
+        
+        // イベントハンドラ（get失敗時）を登録
+        request.onerror = (event: Event) => {
+          const error: DOMException | null = request.error;
+          console.log("Error: ", error);
+        };
+
+      });
+
+      // イベントハンドラ（トランザクションが完了時）を登録
+      transaction.oncomplete = (event: Event) => {
+        successCallback(records);
+      };
+
+      // イベントハンドラ（トランザクション中のエラー発生時）を登録
+      transaction.onerror = (event: Event) => {
+        const iDBRequest  : IDBRequest          = event.target as IDBRequest;
+        const error       : DOMException | null = iDBRequest.error;
+        console.log("Error: ", error);
+      };
+    }
+
+    this.manipulate(readCallback);
+
+  }
+
 }
 
 export default IDBHandler;
