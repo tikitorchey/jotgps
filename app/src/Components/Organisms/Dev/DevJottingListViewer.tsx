@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Card, CardContent, Typography, CardActions } from "@mui/material";
 import { Table, TableBody, TableCell, TableRow, TableHead } from "@mui/material";
-import { ArrowCircleRight, ArrowCircleLeft } from "@mui/icons-material";
+import { DataArray, ArrowCircleRight, ArrowCircleLeft } from "@mui/icons-material";
 import Jotting from "src/jgEngine/models/jotting";
 
 /**
@@ -21,26 +21,15 @@ export const DevJottingListViewer: React.FC<Props> = ({ jottingList }) => {
   const TABLE_SIZE: number = 5;
 
   // ___ state ___ ___ ___ ___ ___
-  const [ sampleState, setSampleState ] = useState<string>('This is SampleState');
   const [ tableIndex, setTableIndex ] = useState<number>(0);
 
   // ___ use effect ___ ___ ___ ___ ___
-  useEffect( () => { console.log(sampleState) }, [ sampleState ] );
 
   // ___ event handler ___ ___ ___ ___ ___
-  const handleChange = (e : React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value
-    setSampleState(newValue);
-  };
 
   // ___ method ___ ___ ___ ___ ___
   const test = () => {
     console.log('test');
-  }
-  
-  const onClickResetButton = () => {
-    const initialVal = 'This is SampleState';
-    setSampleState(initialVal);
   }
 
   const incrementTableIndex = () => {
@@ -69,34 +58,45 @@ export const DevJottingListViewer: React.FC<Props> = ({ jottingList }) => {
   return (
 
     <Card variant = "outlined">
+      
+      <CardContent>
 
-      <Table>
+        <Typography variant = "h5" component = "div">
+          <DataArray /> Records Loaded on UI 
+        </Typography>
+        <Typography variant = "body2" sx = {{ color: 'text.secondary' }}>
+          This is a list of records loaded on React's State (different from the data saved on IndexedDB).
+        </Typography>
 
-        <TableHead>
-          <TableRow>
-            <TableCell> ID         </TableCell>
-            <TableCell> Date       </TableCell>
-            <TableCell> Latitude   </TableCell>
-            <TableCell> Longitude  </TableCell>
-          </TableRow>
-        </TableHead>
+        <Table>
 
-        <TableBody>
-          {/** jottingList内のデータを一覧表示する */}
-          { provideRow(jottingList[ 0 + (tableIndex * TABLE_SIZE) ]) }
-          { provideRow(jottingList[ 1 + (tableIndex * TABLE_SIZE) ]) }
-          { provideRow(jottingList[ 2 + (tableIndex * TABLE_SIZE) ]) }
-          { provideRow(jottingList[ 3 + (tableIndex * TABLE_SIZE) ]) }
-          { provideRow(jottingList[ 4 + (tableIndex * TABLE_SIZE) ]) }
-        </TableBody>
+          <TableHead>
+            <TableRow>
+              <TableCell> ID         </TableCell>
+              <TableCell> Date       </TableCell>
+              <TableCell> Latitude   </TableCell>
+              <TableCell> Longitude  </TableCell>
+            </TableRow>
+          </TableHead>
 
-      </Table>
+          <TableBody>
+            {/** jottingList内のデータを一覧表示する */}
+            { provideRow(jottingList[ 0 + (tableIndex * TABLE_SIZE) ]) }
+            { provideRow(jottingList[ 1 + (tableIndex * TABLE_SIZE) ]) }
+            { provideRow(jottingList[ 2 + (tableIndex * TABLE_SIZE) ]) }
+            { provideRow(jottingList[ 3 + (tableIndex * TABLE_SIZE) ]) }
+            { provideRow(jottingList[ 4 + (tableIndex * TABLE_SIZE) ]) }
+          </TableBody>
 
-      <CardActions sx = {{ display: "flex", justifyContent: "flex-end" }}>
-        <Typography> Page: { tableIndex } </Typography>
-        <Button size = "small" onClick = { decrementTableIndex } > <ArrowCircleLeft/> </Button>
-        <Button size = "small" onClick = { incrementTableIndex } > <ArrowCircleRight/> </Button>
-      </CardActions>
+        </Table>
+
+        <CardActions sx = {{ display: "flex", justifyContent: "flex-end" }}>
+          <Typography> Page: { tableIndex } </Typography>
+          <Button size = "small" onClick = { decrementTableIndex } > <ArrowCircleLeft/> </Button>
+          <Button size = "small" onClick = { incrementTableIndex } > <ArrowCircleRight/> </Button>
+        </CardActions>
+
+      </CardContent>
 
     </Card>
   );
