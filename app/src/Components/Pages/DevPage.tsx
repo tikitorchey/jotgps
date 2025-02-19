@@ -5,35 +5,21 @@ import { JGEngine } from "../../jgEngine/jgEngine";
 import { LatLng, Jotter } from "../../jgEngine/types";
 import { Jotting } from "../../jgEngine/models/jotting";
 import { DevJottingListViewer } from "../Organisms/Dev/DevJottingListViewer";
+import { DevGPSViewer } from "../Organisms/Dev/DevGPSViewer";
 
-type Props = {
-  sampleProp ?: any;
-}
-
-export const DevPage: React.FC<Props> = ({ sampleProp }) => {
+export const DevPage: React.FC = () => {
 
   // ___ state ___ ___ ___ ___ ___
-  const [ sampleState,  setSampleState ]  = useState<string>('This is SampleState');
-  const [ gpsCoords,    setGPSCoords ]    = useState<LatLng>({ lat: null, lng: null });
+  // const [ sampleState,  setSampleState ]  = useState<string>('This is SampleState');
   const [ jottingList,  setJottingList ]  = useState<Array<Jotting>>([]);
 
   // ___ use ref ___ ___ ___ ___ ___
-  // const inputRef = useRef<HTMLInputElement | null>(null);
 
   // ___ use effect ___ ___ ___ ___ ___
-  useEffect( () => { console.log(sampleState) }, [ sampleState ] );
 
   // ___ event handler ___ ___ ___ ___ ___
   const handleChange = (e : React.ChangeEvent<HTMLInputElement>) => {
   };
-
-  const onClickGetGPSCoordsButton = async () => {
-
-    const geoPos: GeolocationPosition = await JGEngine.getGPSCoords();
-    const gpsCoords: LatLng = { lat: geoPos.coords.latitude, lng: geoPos.coords.longitude }
-    setGPSCoords(gpsCoords);
-    
-  }
 
   const onClickAddJottingToListButton = async () => {
 
@@ -105,43 +91,9 @@ export const DevPage: React.FC<Props> = ({ sampleProp }) => {
           <DevJottingListViewer jottingList = { jottingList } />
         </Grid2>
 
+        {/** Geolocation APIの開発用 */}
         <Grid2>
-
-          {/** Geolocation APIの開発用 */}
-          <Card variant = "outlined">
-
-            <CardContent>
-
-              <CardActionArea onClick = { onClickGetGPSCoordsButton }>
-                <Typography variant = "h5" component = "div">
-                  Get GPS Coordinates
-                </Typography>
-                <Typography variant = "body2" sx = {{ color: 'text.secondary' }}>
-                  Get the location coordinates of the device from the browser's geolocation API.
-                </Typography>
-              </CardActionArea>
-
-              <CardContent>
-                {/** 取得したgpsCoordsを表示する */}
-                {/** GPS座標が取得されていない場合、ハイフンを表示する */}
-                <Table>
-                  <TableBody>
-                    <TableRow>
-                      <TableCell> Latitude </TableCell>
-                      <TableCell> { (gpsCoords?.lat ? gpsCoords?.lat : "-" ) } </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell> Longitude </TableCell>
-                      <TableCell> { (gpsCoords?.lng ? gpsCoords?.lng : "-" ) } </TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </CardContent>
-
-            </CardContent>
-
-          </Card>
-
+          <DevGPSViewer />
         </Grid2>
 
         <Grid2>
