@@ -4,6 +4,7 @@ import { Table, TableBody, TableCell, TableRow, TableHead } from "@mui/material"
 import { JGEngine } from "../../jgEngine/jgEngine";
 import { LatLng, Jotter } from "../../jgEngine/types";
 import { Jotting } from "../../jgEngine/models/jotting";
+import { DevJottingListViewer } from "../Organisms/Dev/DevJottingListViewer";
 
 type Props = {
   sampleProp ?: any;
@@ -101,34 +102,7 @@ export const DevPage: React.FC<Props> = ({ sampleProp }) => {
 
         {/** UI State */}
         <Grid2 size = { 12 }>
-          <Card variant = "outlined">
-
-            <Table>
-
-              <TableHead>
-                <TableRow>
-                  <TableCell> ID         </TableCell>
-                  <TableCell> Date       </TableCell>
-                  <TableCell> Latitude   </TableCell>
-                  <TableCell> Longitude  </TableCell>
-                </TableRow>
-              </TableHead>
-
-              <TableBody>
-                {/** jottingList内のデータを一覧表示する */}
-                { jottingList.map( (jotting: Jotting) => (
-                  <TableRow key = { jotting.id }>
-                    <TableCell> { jotting.id }                                              </TableCell>
-                    <TableCell> { (jotting.metaData.date ? jotting.metaData.date : "-" ) }  </TableCell>
-                    <TableCell> { (jotting.gpsCoords.lat ? jotting.gpsCoords.lat : "-" ) }  </TableCell>
-                    <TableCell> { (jotting.gpsCoords.lng ? jotting.gpsCoords.lng : "-" ) }  </TableCell>
-                  </TableRow>
-                )) }
-              </TableBody>
-
-            </Table>
-
-          </Card>
+          <DevJottingListViewer jottingList = { jottingList } />
         </Grid2>
 
         <Grid2>
