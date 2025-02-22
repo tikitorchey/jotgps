@@ -91,11 +91,6 @@ export const DevPage: React.FC = () => {
           <DevJottingListViewer jottingList = { jottingList } />
         </Grid2>
 
-        {/** Geolocation APIの開発用 */}
-        <Grid2>
-          <DevGPSViewer />
-        </Grid2>
-
         <Grid2>
           <Card variant = "outlined">
             <CardContent>
@@ -104,24 +99,34 @@ export const DevPage: React.FC = () => {
             </CardContent>
           </Card>
         </Grid2>
-
+      
+        {/** IndexedDBの開発用 */}
         <Grid2>
           <Card variant = "outlined">
-            <button onClick = { onClickExportJSONButton }> Export JSON </button>
-            <button onClick = { onClickImportJSONButton }> Import JSON </button>
+            <CardContent>
+              <button onClick = { onClickDBTestButton }> DB Test </button>
+              <button onClick = { onClickDBSaveTestButton }> DB Save Test </button>
+              <button onClick = { onClickDBReadAllTestButton }> DB Read All Test </button>
+              <button onClick = { onClickDBReadTargetTestButton }> DB Read Target Test </button>
+            </CardContent>
           </Card>
         </Grid2>
 
-      </Grid2>
-      
-      {/** IndexedDBの開発用 */}
-      <Grid2 container spacing = { 2 }>
-        <Card variant = "outlined">
-          <button onClick = { onClickDBTestButton }> DB Test </button>
-          <button onClick = { onClickDBSaveTestButton }> DB Save Test </button>
-          <button onClick = { onClickDBReadAllTestButton }> DB Read All Test </button>
-          <button onClick = { onClickDBReadTargetTestButton }> DB Read Target Test </button>
-        </Card>
+       {/** Import/Exportの開発用 */}
+        <Grid2>
+          <Card variant = "outlined">
+            <CardContent>
+              <button onClick = { onClickExportJSONButton }> Export JSON </button>
+              <button onClick = { onClickImportJSONButton }> Import JSON </button>
+            </CardContent>
+          </Card>
+        </Grid2>
+
+        {/** Geolocation APIの開発用 */}
+        <Grid2>
+          <DevGPSViewer />
+        </Grid2>
+
       </Grid2>
 
     </div>
