@@ -100,6 +100,7 @@ export const DevJottingListViewer: React.FC<Props> = ({ jottingList }) => {
         </Table>
 
         <CardActions sx = {{ display: "flex", justifyContent: "flex-end" }}>
+          <Typography sx = {{ marginRight: "auto" }}> Number of Records: { jottingList.length } </Typography>
           <Typography> Page: { tableIndex } </Typography>
           <Button size = "small" onClick = { decrementTableIndex } > <ArrowCircleLeft/> </Button>
           <Button size = "small" onClick = { incrementTableIndex } > <ArrowCircleRight/> </Button>
