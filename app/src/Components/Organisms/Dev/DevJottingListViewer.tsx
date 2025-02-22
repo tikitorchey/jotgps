@@ -44,16 +44,29 @@ export const DevJottingListViewer: React.FC<Props> = ({ jottingList }) => {
     }
   }
 
-  const provideRow = (jotting: Jotting) => {
-    const row = 
-      <TableRow key = { jotting?.id }>
-        <TableCell> { jotting?.id }                                              </TableCell>
-        <TableCell> { (jotting?.metaData.date ? jotting.metaData.date : "-" ) }  </TableCell>
-        <TableCell> { (jotting?.gpsCoords.lat ? jotting.gpsCoords.lat : "-" ) }  </TableCell>
-        <TableCell> { (jotting?.gpsCoords.lng ? jotting.gpsCoords.lng : "-" ) }  </TableCell>
-      </TableRow>
-    return row;
-  }
+  const provideTableCells = (tableSize: number): Array<React.JSX.Element> => {
+
+    const table = [];
+
+    const provideRow = (jotting: Jotting) => {
+      const row: React.JSX.Element = 
+        <TableRow key = { jotting?.id }>
+          <TableCell> { jotting?.id }                                              </TableCell>
+          <TableCell> { (jotting?.metaData.date ? jotting.metaData.date : "-" ) }  </TableCell>
+          <TableCell> { (jotting?.gpsCoords.lat ? jotting.gpsCoords.lat : "-" ) }  </TableCell>
+          <TableCell> { (jotting?.gpsCoords.lng ? jotting.gpsCoords.lng : "-" ) }  </TableCell>
+        </TableRow>
+      return row;
+    }
+
+    for(let i = 0; i < tableSize; i++){
+      const targetJotting = jottingList[ i + (tableIndex * TABLE_SIZE) ];
+      const row = provideRow(targetJotting)
+      table.push(row);
+    }
+    
+    return table;
+  } 
 
   return (
 
@@ -81,11 +94,7 @@ export const DevJottingListViewer: React.FC<Props> = ({ jottingList }) => {
 
           <TableBody>
             {/** jottingList内のデータを一覧表示する */}
-            { provideRow(jottingList[ 0 + (tableIndex * TABLE_SIZE) ]) }
-            { provideRow(jottingList[ 1 + (tableIndex * TABLE_SIZE) ]) }
-            { provideRow(jottingList[ 2 + (tableIndex * TABLE_SIZE) ]) }
-            { provideRow(jottingList[ 3 + (tableIndex * TABLE_SIZE) ]) }
-            { provideRow(jottingList[ 4 + (tableIndex * TABLE_SIZE) ]) }
+            { provideTableCells(TABLE_SIZE) }
           </TableBody>
 
         </Table>
