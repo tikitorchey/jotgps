@@ -45,8 +45,9 @@ export const DevJottingListViewer: React.FC<Props> = ({ jottingList }) => {
   }
 
   const provideTableRow = (jotting: Jotting) => {
+    // Math.random() > Reactコンポーネントの仕様上、空データ行の場合でもキーが必要なため適当に生成
     const row: React.JSX.Element = 
-      <TableRow key = { jotting?.id ? jotting.id : Math.random() }>   {/** Math.random() > Reactコンポーネントの仕様上、空データ行の場合でもキーが必要なため適当に生成 */}
+      <TableRow key = { jotting?.id ? jotting.id : Math.random() }>
         <TableCell> { jotting?.id }                                              </TableCell>
         <TableCell> { (jotting?.metaData.date ? jotting.metaData.date : "-" ) }  </TableCell>
         <TableCell> { (jotting?.gpsCoords.lat ? jotting.gpsCoords.lat : "-" ) }  </TableCell>
