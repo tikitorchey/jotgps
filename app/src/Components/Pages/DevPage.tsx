@@ -6,6 +6,7 @@ import { LatLng, Jotter } from "../../jgEngine/types";
 import { Jotting } from "../../jgEngine/models/jotting";
 import { DevJottingListViewer } from "../Organisms/Dev/DevJottingListViewer";
 import { DevGPSViewer } from "../Organisms/Dev/DevGPSViewer";
+import DevJottingListControl from "../Organisms/Dev/DevJottingListControl";
 
 export const DevPage: React.FC = () => {
 
@@ -20,29 +21,6 @@ export const DevPage: React.FC = () => {
   // ___ event handler ___ ___ ___ ___ ___
   const handleChange = (e : React.ChangeEvent<HTMLInputElement>) => {
   };
-
-  const onClickAddJottingToListButton = async () => {
-
-    const jotting: Jotting = new Jotting();
-
-    // GPS座標を取得・セット
-    const geoPos: GeolocationPosition = await JGEngine.getGPSCoords();
-    jotting.initialize(geoPos);
-
-    /** Memo: structuredClone関数によりオブジェクトを複製する理由
-     *    Reactはオブジェクト内部の変更を検出できない。
-     *    そこで、オブジェクト自体を複製することでオブジェクトIDを変えることで変更を検出させている
-     */
-    const clonedJottingList = structuredClone(jottingList);
-    clonedJottingList.push(jotting);
-
-    setJottingList(clonedJottingList);
-
-  }
-
-  const onClickClearJottingListButton = () => {
-    setJottingList([]);
-  }
 
   const onClickImportJSONButton = async () => {
     const importedJSON      = await JGEngine.importJSON();
@@ -91,15 +69,11 @@ export const DevPage: React.FC = () => {
           <DevJottingListViewer jottingList = { jottingList } />
         </Grid2>
 
+        {/** Jottingの管理用 */}
         <Grid2>
-          <Card variant = "outlined">
-            <CardContent>
-              <button onClick = { onClickAddJottingToListButton }> Add Jotting To List </button>
-              <button onClick = { onClickClearJottingListButton }> Clear Jottings List </button>
-            </CardContent>
-          </Card>
+          <DevJottingListControl jottingList = { jottingList } setJottingList = { setJottingList } />
         </Grid2>
-      
+
         {/** IndexedDBの開発用 */}
         <Grid2>
           <Card variant = "outlined">
