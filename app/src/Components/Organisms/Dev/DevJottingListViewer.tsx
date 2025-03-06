@@ -44,24 +44,24 @@ export const DevJottingListViewer: React.FC<Props> = ({ jottingList }) => {
     }
   }
 
-  const provideTableCells = (tableSize: number): Array<React.JSX.Element> => {
+  const provideTableRow = (jotting: Jotting) => {
+    const row: React.JSX.Element = 
+      <TableRow key = { jotting?.id ? jotting.id : Math.random() }>   {/** Math.random() > Reactコンポーネントの仕様上、空データ行の場合でもキーが必要なため適当に生成 */}
+        <TableCell> { jotting?.id }                                              </TableCell>
+        <TableCell> { (jotting?.metaData.date ? jotting.metaData.date : "-" ) }  </TableCell>
+        <TableCell> { (jotting?.gpsCoords.lat ? jotting.gpsCoords.lat : "-" ) }  </TableCell>
+        <TableCell> { (jotting?.gpsCoords.lng ? jotting.gpsCoords.lng : "-" ) }  </TableCell>
+      </TableRow>
+    return row;
+  }
+
+  const provideTableRows = (tableSize: number): Array<React.JSX.Element> => {
 
     const table = [];
 
-    const provideRow = (jotting: Jotting) => {
-      const row: React.JSX.Element = 
-        <TableRow key = { jotting?.id }>
-          <TableCell> { jotting?.id }                                              </TableCell>
-          <TableCell> { (jotting?.metaData.date ? jotting.metaData.date : "-" ) }  </TableCell>
-          <TableCell> { (jotting?.gpsCoords.lat ? jotting.gpsCoords.lat : "-" ) }  </TableCell>
-          <TableCell> { (jotting?.gpsCoords.lng ? jotting.gpsCoords.lng : "-" ) }  </TableCell>
-        </TableRow>
-      return row;
-    }
-
     for(let i = 0; i < tableSize; i++){
       const targetJotting = jottingList[ i + (tableIndex * TABLE_SIZE) ];
-      const row = provideRow(targetJotting)
+      const row = provideTableRow(targetJotting)
       table.push(row);
     }
     
@@ -94,7 +94,7 @@ export const DevJottingListViewer: React.FC<Props> = ({ jottingList }) => {
 
           <TableBody>
             {/** jottingList内のデータを一覧表示する */}
-            { provideTableCells(TABLE_SIZE) }
+            { provideTableRows(TABLE_SIZE) }
           </TableBody>
 
         </Table>
