@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Button, Card, CardContent, Typography, CardActions, Grid2 } from "@mui/material";
+import { LibraryAdd, AddCircleOutline, RemoveCircleOutline, DeleteForever } from "@mui/icons-material";
 import { JGEngine } from "../../../jgEngine/jgEngine";
 import { Jotting } from "../../../jgEngine/models/jotting";
-import { LibraryAdd, AddCircleOutline, RemoveCircleOutline, DeleteForever } from "@mui/icons-material";
 
 /**
  * Outline	: XXXするComponent
@@ -14,7 +14,7 @@ import { LibraryAdd, AddCircleOutline, RemoveCircleOutline, DeleteForever } from
 // Type Declaration of Props
 type Props = {
   jottingList   : Array<Jotting>;
-  setJottingList: any;
+  setJottingList: (jottingList: Array<Jotting>) => void;
 }
 
 export const DevJottingListControl: React.FC<Props> = ({ jottingList, setJottingList }) => {
@@ -74,14 +74,14 @@ export const DevJottingListControl: React.FC<Props> = ({ jottingList, setJotting
 
   return (
 
-    <Card variant = "outlined">
+    <Card variant = "outlined"  sx = {{ height: '100%' }}>
 
       <CardContent>
         <Typography variant = "h5" component = "div">
-          <LibraryAdd /> Control Records Loaded on UI
+          <LibraryAdd /> Control Records Loaded on The UI
         </Typography>
         <Typography variant = "body2" sx = {{ color: 'text.secondary' }}>
-          You can add / remove / cleare Jottings loaded on UI.
+          Add / Remove / Clear Jottings loaded on The UI.
         </Typography>
       </CardContent>
 
@@ -91,8 +91,7 @@ export const DevJottingListControl: React.FC<Props> = ({ jottingList, setJotting
         <Button size = "small" onClick = { onClickAddButton } >     <AddCircleOutline  />     </Button>
       </CardActions>
 
-
-  </Card>
+    </Card>
 
   );
 };

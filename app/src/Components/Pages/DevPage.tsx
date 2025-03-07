@@ -7,6 +7,7 @@ import { Jotting } from "../../jgEngine/models/jotting";
 import { DevJottingListViewer } from "../Organisms/Dev/DevJottingListViewer";
 import { DevGPSViewer } from "../Organisms/Dev/DevGPSViewer";
 import DevJottingListControl from "../Organisms/Dev/DevJottingListControl";
+import DevExpImpControl from "../Organisms/Dev/DevExpImpControl";
 
 export const DevPage: React.FC = () => {
 
@@ -61,44 +62,53 @@ export const DevPage: React.FC = () => {
 
       <h2>{ DevPage.name }</h2>
 
-      {/** 基本機能の開発用 */}
       <Grid2 container spacing = { 2 }>
 
-        {/** UI State */}
-        <Grid2 size = { 12 }>
-          <DevJottingListViewer jottingList = { jottingList } />
+        {/** 基本機能の開発用エリア */}
+        <Grid2 container size = { 12 } spacing = { 2 }>
+
+          {/** UI State */}
+          <Grid2 size = { 12 } >
+            <DevJottingListViewer jottingList = { jottingList } />
+          </Grid2>
+
+          {/** Jottingの管理用 */}
+          <Grid2 size = {{ sm: 6 }}>
+            <DevJottingListControl jottingList = { jottingList } setJottingList = { setJottingList } />
+          </Grid2>
+
+          {/** Import/Exportの開発用 */}
+          <Grid2 size = {{ sm: 6 }}>
+            <DevExpImpControl jottingList = { jottingList } setJottingList = { setJottingList }/>
+          </Grid2>
+
         </Grid2>
 
-        {/** Jottingの管理用 */}
-        <Grid2>
-          <DevJottingListControl jottingList = { jottingList } setJottingList = { setJottingList } />
+        {/** 追加機能の開発用エリア */}
+        <Grid2 container size = { 12 } spacing = { 2 } >
+
+          {/** IndexedDBの開発用 */}
+          <Grid2>
+            <Card variant = "outlined">
+              <CardContent>
+                <button onClick = { onClickDBTestButton }>            DB Test             </button>
+                <button onClick = { onClickDBSaveTestButton }>        DB Save Test        </button>
+                <button onClick = { onClickDBReadAllTestButton }>     DB Read All Test    </button>
+                <button onClick = { onClickDBReadTargetTestButton }>  DB Read Target Test </button>
+              </CardContent>
+            </Card>
+          </Grid2>
+
         </Grid2>
 
-        {/** IndexedDBの開発用 */}
-        <Grid2>
-          <Card variant = "outlined">
-            <CardContent>
-              <button onClick = { onClickDBTestButton }> DB Test </button>
-              <button onClick = { onClickDBSaveTestButton }> DB Save Test </button>
-              <button onClick = { onClickDBReadAllTestButton }> DB Read All Test </button>
-              <button onClick = { onClickDBReadTargetTestButton }> DB Read Target Test </button>
-            </CardContent>
-          </Card>
-        </Grid2>
+        {/** 単体の小機能の開発用 */}
+        <Grid2 container size = { 12 } spacing = { 2 } >
 
-       {/** Import/Exportの開発用 */}
-        <Grid2>
-          <Card variant = "outlined">
-            <CardContent>
-              <button onClick = { onClickExportJSONButton }> Export JSON </button>
-              <button onClick = { onClickImportJSONButton }> Import JSON </button>
-            </CardContent>
-          </Card>
-        </Grid2>
+          {/** Geolocation APIの開発用 */}
+          <Grid2>
+            <DevGPSViewer />
+          </Grid2>
 
-        {/** Geolocation APIの開発用 */}
-        <Grid2>
-          <DevGPSViewer />
         </Grid2>
 
       </Grid2>

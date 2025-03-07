@@ -76,7 +76,7 @@ export const DevJottingListViewer: React.FC<Props> = ({ jottingList }) => {
       <CardContent>
 
         <Typography variant = "h5" component = "div">
-          <DataArray /> Records Loaded on UI 
+          <DataArray /> Records Loaded on The UI 
         </Typography>
         <Typography variant = "body2" sx = {{ color: 'text.secondary' }}>
           This is a list of records loaded on React's State (different from the data saved on IndexedDB).
