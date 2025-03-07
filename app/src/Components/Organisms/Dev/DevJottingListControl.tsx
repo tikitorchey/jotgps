@@ -74,7 +74,7 @@ export const DevJottingListControl: React.FC<Props> = ({ jottingList, setJotting
 
   return (
 
-    <Card variant = "outlined"  sx = {{ height: '100%' }}>
+    <Card variant = "outlined"  sx = {{ height: "100%" }}>
 
       <CardContent>
         <Typography variant = "h5" component = "div">
