@@ -60,11 +60,11 @@ export const DevExpImpControl: React.FC<Props> = ({ jottingList, setJottingList 
 
       <CardContent>
         <Typography variant = "h5" component = "div">
-          <ImportExport /> Control Records Loaded on The UI
+          <ImportExport /> Export / Import Records Loaded on The UI
         </Typography>
         <Typography variant = "body2" sx = {{ color: 'text.secondary' }}>
-          Import records from a JSON file and load them on the UI.
           Export the records on the UI to a JSON file and save it to the device.
+          Import records from a JSON file and load them on the UI.
         </Typography>
       </CardContent>
 
