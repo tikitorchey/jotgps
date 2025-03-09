@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Button, Box, Card, CardContent, Typography, CardActions, CardActionArea, Grid2, Tooltip } from "@mui/material";
-import { ImportExport, FileUpload, FileDownload } from "@mui/icons-material";
+import { Storage, Save, BrowserUpdated } from "@mui/icons-material";
 import { JGEngine } from "../../../jgEngine/jgEngine";
 import { Jotting } from "../../../jgEngine/models/jotting";
 
@@ -64,26 +64,22 @@ export const DevIDBControl: React.FC<Props> = ({ jottingList, setJottingList }) 
 
       <CardContent>
         <Typography variant = "h5" component = "div">
-          <ImportExport /> Export / Import Records Loaded on The UI
+          <Storage /> Test IndexedDB
         </Typography>
         <Typography variant = "body2" sx = {{ color: 'text.secondary' }}>
-
+          Save data on the UI to the IndexedDB / Load data on the IndexedDB to the UI.
           * To check the database directly, go to Developer mode(F12 key) {'>'} Application Tab {`>`} Storage Tab {`>`} IndexedDB (in Chrome environment)
         </Typography>
       </CardContent>
 
       <CardActions sx = {{ display: "flex", justifyContent: "flex-end" }}>
-        <Tooltip title = "Initialize the IndexedDB">
-          <Button size = "small" onClick = { onClickDBTestButton }> <FileUpload /> </Button> 
-        </Tooltip>
+
         <Tooltip title = "Save Data on the UI to the IndexedDB">
-          <Button size = "small" onClick = { onClickDBSaveTestButton }> <FileUpload /> </Button>
+          <Button size = "small" onClick = { onClickDBSaveTestButton }> <Save /> </Button>
         </Tooltip>
+
         <Tooltip title = "Load Data on the IndexDB to the UI">
-          <Button size = "small" onClick = { onClickDBReadAllTestButton }> <FileUpload /> </Button>
-        </Tooltip>
-        <Tooltip title = "Load Target Data on the IndexDB to the UI">
-          <Button size = "small" onClick = { onClickDBReadTargetTestButton }> <FileUpload /> </Button>
+          <Button size = "small" onClick = { onClickDBReadAllTestButton }> <BrowserUpdated /> </Button>
         </Tooltip>
 
       </CardActions>

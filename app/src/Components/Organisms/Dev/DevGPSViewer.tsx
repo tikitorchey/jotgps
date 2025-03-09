@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, Card, CardContent, Typography, CardActions } from "@mui/material";
-import { Table, TableBody, TableCell, TableRow, TableHead } from "@mui/material";
+import { Table, TableBody, TableCell, TableRow, TableHead, Tooltip } from "@mui/material";
 import { JGEngine } from "../../../jgEngine/jgEngine";
 import { LatLng, Jotter } from "../../../jgEngine/types";
 import { GpsFixed } from "@mui/icons-material";
@@ -69,7 +69,9 @@ export const DevGPSViewer: React.FC = () => {
         </CardContent>
 
         <CardActions sx = {{ display: "flex", justifyContent: "flex-end" }}>
-          <Button size = "large" onClick = { onClickGetGPSCoordsButton } > Go! </Button>
+          <Tooltip title = "Get GPS Coordinates">
+            <Button size = "large" onClick = { onClickGetGPSCoordsButton } > Go! </Button>
+          </Tooltip>
         </CardActions>
 
       </Card>

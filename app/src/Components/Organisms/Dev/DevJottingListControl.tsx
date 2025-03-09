@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Button, Card, CardContent, Typography, CardActions, Grid2 } from "@mui/material";
-import { LibraryAdd, AddCircleOutline, RemoveCircleOutline, DeleteForever } from "@mui/icons-material";
+import { Button, Card, CardContent, Typography, CardActions, Grid2, Tooltip } from "@mui/material";
+import { DataArray, AddCircleOutline, RemoveCircleOutline, DeleteForever } from "@mui/icons-material";
 import { JGEngine } from "../../../jgEngine/jgEngine";
 import { Jotting } from "../../../jgEngine/models/jotting";
 
@@ -78,7 +78,7 @@ export const DevJottingListControl: React.FC<Props> = ({ jottingList, setJotting
 
       <CardContent>
         <Typography variant = "h5" component = "div">
-          <LibraryAdd /> Control Records Loaded on The UI
+          <DataArray /> Control Records Loaded on The UI
         </Typography>
         <Typography variant = "body2" sx = {{ color: 'text.secondary' }}>
           Add / Remove / Clear Jottings loaded on The UI.
@@ -86,9 +86,19 @@ export const DevJottingListControl: React.FC<Props> = ({ jottingList, setJotting
       </CardContent>
 
       <CardActions sx = {{ display: "flex", justifyContent: "flex-end" }}>
-        <Button size = "small" onClick = { onClickClearButton }>    <DeleteForever />         </Button>
-        <Button size = "small" onClick = { onClickRemoveButton } >  <RemoveCircleOutline />   </Button>
-        <Button size = "small" onClick = { onClickAddButton } >     <AddCircleOutline  />     </Button>
+
+        <Tooltip title = "Remove All Records">
+          <Button size = "small" onClick = { onClickClearButton }> <DeleteForever /> </Button>
+        </Tooltip>
+
+        <Tooltip title = "Remove a Latest Record">
+          <Button size = "small" onClick = { onClickRemoveButton } > <RemoveCircleOutline /> </Button>
+        </Tooltip>
+
+        <Tooltip title = "Create A New Record">
+          <Button size = "small" onClick = { onClickAddButton } > <AddCircleOutline  /> </Button>
+        </Tooltip>
+
       </CardActions>
 
     </Card>
