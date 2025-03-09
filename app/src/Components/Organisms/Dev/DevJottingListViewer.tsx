@@ -79,7 +79,7 @@ export const DevJottingListViewer: React.FC<Props> = ({ jottingList }) => {
           <DataArray /> Records Loaded on The UI 
         </Typography>
         <Typography variant = "body2" sx = {{ color: 'text.secondary' }}>
-          This is a list of records loaded on React's State (different from the data saved on IndexedDB).
+          This is a list of records loaded on React's State (these data are not necessarily saved on the IndexedDB).
         </Typography>
 
         <Table>

@@ -115,12 +115,11 @@ export class JGEngine{
     IDBHandler.readAllRecords("jotting", successCallback);
   }
 
-  static iDBReadTargetTest(func: (data: any) => void){
-    const TARGET_KEYS = ["01JMC2RCVXYPBVVWP824Q46HJZ"];
+  static iDBReadTargetTest(tardetKeys: Array<string>, func: (data: any) => void){
     const successCallback = (data: any) => {
       func(data);
     }
-    IDBHandler.readTargetRecordsByKey("jotting", TARGET_KEYS, successCallback);
+    IDBHandler.readTargetRecordsByKey("jotting", tardetKeys, successCallback);
   }
 
 }
