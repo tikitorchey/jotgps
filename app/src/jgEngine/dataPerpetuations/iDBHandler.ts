@@ -247,6 +247,7 @@ export class IDBHandler{
         const error       : DOMException | null = iDBRequest.error;
         console.log("Error: ", error);
       };
+      
     }
 
     this.manipulate(readCallback);

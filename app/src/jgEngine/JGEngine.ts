@@ -1,6 +1,9 @@
 import Utils from "./utils";
 import IDBHandler from "./dataPerpetuations/iDBHandler";
 import Jotting from "./models/jotting";
+import { StoreName } from "./dataPerpetuations/iDBSchema";
+
+const IDB_STORENAME_JOTTING: StoreName = "jotting";
 
 export class JGEngine{
 
@@ -95,32 +98,22 @@ export class JGEngine{
     return jsObject;
   }
 
-  static iDBTest(){
-    /**
-    const successCallback = (iDB: IDBDatabase) => {
-      console.log(iDB);
-    }
-    IDBHandler.manipulate(successCallback);
-     */
+  static iDBCreateJottings(jottingToSave: Array<Jotting>){
+    IDBHandler.createRecords(IDB_STORENAME_JOTTING, jottingToSave);
   }
 
-  static iDBCreateTest(jottingToSave: Array<Jotting>){
-    IDBHandler.createRecords("jotting", jottingToSave);
-  }
-
-  static iDBReadAllTest(func: (data: any) => void){
+  static iDBReadAllJottings(func: (data: any) => void){
     const successCallback = (data: any) => {
       func(data);
     }
-    IDBHandler.readAllRecords("jotting", successCallback);
+    IDBHandler.readAllRecords(IDB_STORENAME_JOTTING, successCallback);
   }
 
-  static iDBReadTargetTest(func: (data: any) => void){
-    const TARGET_KEYS = ["01JMC2RCVXYPBVVWP824Q46HJZ"];
+  static iDBReadTargetJottings(tardetKeys: Array<string>, func: (data: any) => void){
     const successCallback = (data: any) => {
       func(data);
     }
-    IDBHandler.readTargetRecordsByKey("jotting", TARGET_KEYS, successCallback);
+    IDBHandler.readTargetRecordsByKey(IDB_STORENAME_JOTTING, tardetKeys, successCallback);
   }
 
 }

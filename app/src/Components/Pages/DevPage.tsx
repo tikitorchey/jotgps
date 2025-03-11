@@ -1,88 +1,28 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Button } from "@mui/material";
+import { Button, Box, Card, CardContent, Typography, CardActions, CardActionArea, Grid2 } from "@mui/material";
+import { Table, TableBody, TableCell, TableRow, TableHead } from "@mui/material";
 import { JGEngine } from "../../jgEngine/jgEngine";
 import { LatLng, Jotter } from "../../jgEngine/types";
 import { Jotting } from "../../jgEngine/models/jotting";
+import { DevJottingListViewer } from "../Organisms/Dev/DevJottingListViewer";
+import { DevGPSViewer } from "../Organisms/Dev/DevGPSViewer";
+import DevJottingListControl from "../Organisms/Dev/DevJottingListControl";
+import DevExpImpControl from "../Organisms/Dev/DevExpImpControl";
+import DevIDBControl from "../Organisms/Dev/DevIDBControl";
 
-type Props = {
-  sampleProp ?: any;
-}
-
-export const DevPage: React.FC<Props> = ({ sampleProp }) => {
+export const DevPage: React.FC = () => {
 
   // ___ state ___ ___ ___ ___ ___
-  const [ sampleState,  setSampleState ]  = useState<string>('This is SampleState');
-  const [ gpsCoords,    setGPSCoords ]    = useState<LatLng>({ lat: null, lng: null });
+  // const [ sampleState,  setSampleState ]  = useState<string>('This is SampleState');
   const [ jottingList,  setJottingList ]  = useState<Array<Jotting>>([]);
 
   // ___ use ref ___ ___ ___ ___ ___
-  // const inputRef = useRef<HTMLInputElement | null>(null);
 
   // ___ use effect ___ ___ ___ ___ ___
-  useEffect( () => { console.log(sampleState) }, [ sampleState ] );
 
   // ___ event handler ___ ___ ___ ___ ___
   const handleChange = (e : React.ChangeEvent<HTMLInputElement>) => {
   };
-
-  const onClickGetGPSCoordsButton = async () => {
-
-    const geoPos: GeolocationPosition = await JGEngine.getGPSCoords();
-    const gpsCoords: LatLng = { lat: geoPos.coords.latitude, lng: geoPos.coords.longitude }
-    setGPSCoords(gpsCoords);
-    
-  }
-
-  const onClickAddJottingToListButton = async () => {
-
-    const jotting: Jotting = new Jotting();
-
-    // GPS座標を取得・セット
-    const geoPos: GeolocationPosition = await JGEngine.getGPSCoords();
-    jotting.initialize(geoPos);
-
-    /** Memo: structuredClone関数によりオブジェクトを複製する理由
-     *    Reactはオブジェクト内部の変更を検出できない。
-     *    そこで、オブジェクト自体を複製することでオブジェクトIDを変えることで変更を検出させている
-     */
-    const clonedJottingList = structuredClone(jottingList);
-    clonedJottingList.push(jotting);
-
-    setJottingList(clonedJottingList);
-
-  }
-
-  const onClickClearJottingListButton = () => {
-    setJottingList([]);
-  }
-
-  const onClickImportJSONButton = async () => {
-    const importedJSON      = await JGEngine.importJSON();
-    const importedJottings  = importedJSON as Array<Jotting>;
-    setJottingList(importedJottings);
-  }
-
-  const onClickExportJSONButton = async () => {
-    const fileName: string = "jotgps";
-    await JGEngine.exportJSON(jottingList, fileName);
-  }
-
-  const onClickDBTestButton = async () => {
-    JGEngine.iDBTest();
-  }
-
-  const onClickDBSaveTestButton = async () => {
-    JGEngine.iDBCreateTest(jottingList);
-  }
-
-  const onClickDBReadAllTestButton = async () => {
-    JGEngine.iDBReadAllTest(setJottingList);
-  }
-
-  const onClickDBReadTargetTestButton = async () => {
-    JGEngine.iDBReadTargetTest(setJottingList);
-  }
-
 
   // ___ method ___ ___ ___ ___ ___
   const test = () => {
@@ -95,57 +35,49 @@ export const DevPage: React.FC<Props> = ({ sampleProp }) => {
 
       <h2>{ DevPage.name }</h2>
 
-      {/** 基本機能の開発用 */}
-      <div>
-        <div>
-          <button onClick = { onClickGetGPSCoordsButton }> Get GPS Coords </button>
-        </div>
-        <div>
-          <button onClick = { onClickAddJottingToListButton }> Add Jotting To List </button>
-          <button onClick = { onClickClearJottingListButton }> Clear Jottings List </button>
-        </div>
-        <div>
-          <button onClick = { onClickExportJSONButton }> Export JSON </button>
-        </div>
-        <div>
-          <button onClick = { onClickImportJSONButton }> Import JSON </button>
-        </div>
+      <Grid2 container spacing = { 2 }>
 
-        {/** 取得したgpsCoordsを表示する */}
-        {/** GPS座標が取得されていない場合、ハイフンを表示する */}
-        <p> { "Lat: " + (gpsCoords?.lat ? gpsCoords?.lat : "-" ) } </p>
-        <p> { "Lng: " + (gpsCoords?.lng ? gpsCoords?.lng : "-" ) } </p>
+        {/** 基本機能の開発用エリア */}
+        <Grid2 container size = { 12 } spacing = { 2 }>
 
-        <table>
-          <thead>
-            <tr>
-              <th scope = "col"> ID         </th>
-              <th scope = "col"> Date       </th>
-              <th scope = "col"> Latitude   </th>
-              <th scope = "col"> Longitude  </th>
-            </tr>
-          </thead>
-          <tbody>
-            {/** jottingList内のデータを一覧表示する */}
-            { jottingList.map( (jotting: Jotting) => (
-              <tr key = { jotting.id }>
-                <th scope = "row"> { jotting.id } </th>
-                <th> { (jotting.metaData.date ? jotting.metaData.date : "-" ) } </th>
-                <th> { (jotting.gpsCoords.lat ? jotting.gpsCoords.lat : "-" ) } </th>
-                <th> { (jotting.gpsCoords.lng ? jotting.gpsCoords.lng : "-" ) } </th>
-              </tr>
-            )) }
-          </tbody>
-        </table>
-      </div>
-      
-      {/** IndexedDBの開発用 */}
-      <div>
-        <button onClick = { onClickDBTestButton }> DB Test </button>
-        <button onClick = { onClickDBSaveTestButton }> DB Save Test </button>
-        <button onClick = { onClickDBReadAllTestButton }> DB Read All Test </button>
-        <button onClick = { onClickDBReadTargetTestButton }> DB Read Target Test </button>
-      </div>
+          {/** UI State */}
+          <Grid2 size = { 12 } >
+            <DevJottingListViewer jottingList = { jottingList } />
+          </Grid2>
+
+          {/** Jottingの管理用 */}
+          <Grid2 size = {{ sm: 6 }}>
+            <DevJottingListControl jottingList = { jottingList } setJottingList = { setJottingList } />
+          </Grid2>
+
+          {/** Import/Exportの開発用 */}
+          <Grid2 size = {{ sm: 6 }}>
+            <DevExpImpControl jottingList = { jottingList } setJottingList = { setJottingList }/>
+          </Grid2>
+
+        </Grid2>
+
+        {/** 追加機能の開発用エリア */}
+        <Grid2 container size = { 12 } spacing = { 2 } >
+
+          {/** IndexedDBの開発用 */}
+          <Grid2>
+            <DevIDBControl jottingList = { jottingList } setJottingList = { setJottingList }  />
+          </Grid2>
+
+        </Grid2>
+
+        {/** 単体の小機能の開発用 */}
+        <Grid2 container size = { 12 } spacing = { 2 } >
+
+          {/** Geolocation APIの開発用 */}
+          <Grid2 size = { 6 }>
+            <DevGPSViewer />
+          </Grid2>
+
+        </Grid2>
+
+      </Grid2>
 
     </div>
   );
