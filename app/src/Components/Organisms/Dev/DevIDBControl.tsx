@@ -35,27 +35,18 @@ export const DevIDBControl: React.FC<Props> = ({ jottingList, setJottingList }) 
   const test = () => {
     console.log('test');
   }
-  
-  const onClickResetButton = () => {
-    const initialVal = 'This is SampleState';
-    setSampleState(initialVal);
-  }
-
-  const onClickDBTestButton = async () => {
-    JGEngine.iDBTest();
-  }
 
   const onClickDBSaveTestButton = async () => {
-    JGEngine.iDBCreateTest(jottingList);
+    JGEngine.iDBCreateJottings(jottingList);
   }
 
   const onClickDBReadAllTestButton = async () => {
-    JGEngine.iDBReadAllTest(setJottingList);
+    JGEngine.iDBReadAllJottings(setJottingList);
   }
 
   const onClickDBReadTargetTestButton = async () => {
     const TARGET_KEYS = ["01JMC2RCVXYPBVVWP824Q46HJZ"];
-    JGEngine.iDBReadTargetTest(TARGET_KEYS, setJottingList);
+    JGEngine.iDBReadTargetJottings(TARGET_KEYS, setJottingList);
   }
 
 
