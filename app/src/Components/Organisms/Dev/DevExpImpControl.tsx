@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Button, Box, Card, CardContent, Typography, CardActions, CardActionArea, Grid2 } from "@mui/material";
 import { ImportExport, FileUpload, FileDownload } from "@mui/icons-material";
-import { JGEngine } from "../../../jgEngine_bk/jgEngine";
-import Jotting from "../../../jgEngine_bk/models/jotting";
+import { JGEngine } from "../../../jgEngine/jgEngine";
+import Jotting from "../../../jgEngine/models/jotting";
 
 
 const FILE_NAME: string = "jotgps";

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Button, Card, CardContent, Typography, CardActions, Grid2, Tooltip } from "@mui/material";
 import { DataArray, AddCircleOutline, RemoveCircleOutline, DeleteForever } from "@mui/icons-material";
-import { JGEngine } from "../../../jgEngine_bk/jgEngine";
-import { Jotting } from "../../../jgEngine_bk/models/jotting";
+import { JGEngine } from "../../../jgEngine/jgEngine";
+import { Jotting } from "../../../jgEngine/models/jotting";
 
 /**
  * Outline	: XXXするComponent
