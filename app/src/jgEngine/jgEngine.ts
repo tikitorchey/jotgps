@@ -12,6 +12,8 @@ export class JGEngine{
    * 
    * @remarks
    *  GPS座標の取得にはGeolocationAPIを利用
+   *  GeolocationAPIの利用はsecure origins(https://goo.gl/Y0ZkNV)からの呼び出しが必要となる
+   *  例えばhttps通信やlocalhostでの接続がこれに該当する
    * 
    * @returns
    *  [ToDo: 追記]
