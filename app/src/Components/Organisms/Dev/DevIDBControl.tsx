@@ -55,21 +55,21 @@ export const DevIDBControl: React.FC<Props> = ({ jottingList, setJottingList }) 
 
       <CardContent>
         <Typography variant = "h5" component = "div">
-          <Storage /> Test IndexedDB
+          <Storage /> IndexedDB
         </Typography>
         <Typography variant = "body2" sx = {{ color: 'text.secondary' }}>
-          Save data on the UI to the IndexedDB / Load data on the IndexedDB to the UI.
+          UI上に読み込まれたレコードをIndexedDBへ保存します。また、IndexedDBからUI上へレコードを読み込みます。
           * To check the database directly, go to Developer mode(F12 key) {'>'} Application Tab {`>`} Storage Tab {`>`} IndexedDB (in Chrome environment)
         </Typography>
       </CardContent>
 
       <CardActions sx = {{ display: "flex", justifyContent: "flex-end" }}>
 
-        <Tooltip title = "Save Data on the UI to the IndexedDB">
+        <Tooltip title = "IndexedDBへ保存">
           <Button size = "small" onClick = { onClickDBSaveTestButton }> <Save /> </Button>
         </Tooltip>
 
-        <Tooltip title = "Load Data on the IndexDB to the UI">
+        <Tooltip title = "IndexDBから読み込み">
           <Button size = "small" onClick = { onClickDBReadAllTestButton }> <BrowserUpdated /> </Button>
         </Tooltip>
 

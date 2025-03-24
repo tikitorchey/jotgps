@@ -4,14 +4,7 @@ import { DataArray, AddCircleOutline, RemoveCircleOutline, DeleteForever } from 
 import { JGEngine } from "../../../jgEngine/jgEngine";
 import { Jotting } from "../../../jgEngine/models/jotting";
 
-/**
- * Outline	: XXXするComponent
- * Logic		: - AAAをBBBにする
- *            - 親ComponentからCCCを受け取り、DDDとしたものを子Componentに渡す
- * View			: - KKKをリスト表示する
- */
 
-// Type Declaration of Props
 type Props = {
   jottingList   : Array<Jotting>;
   setJottingList: (jottingList: Array<Jotting>) => void;
@@ -78,24 +71,25 @@ export const DevJottingListControl: React.FC<Props> = ({ jottingList, setJotting
 
       <CardContent>
         <Typography variant = "h5" component = "div">
-          <DataArray /> Control Records Loaded on The UI
+          <DataArray /> Jotting Records Control 
         </Typography>
         <Typography variant = "body2" sx = {{ color: 'text.secondary' }}>
-          Add / Remove / Clear Jottings loaded on The UI.
+          UI上に読み込まれたレコードの 全件削除 / 1件削除 / 新規作成 を行います。
+          IndexedDB内に保存されたレコードとは別物です。
         </Typography>
       </CardContent>
 
       <CardActions sx = {{ display: "flex", justifyContent: "flex-end" }}>
 
-        <Tooltip title = "Remove All Records">
+        <Tooltip title = "全件削除">
           <Button size = "small" onClick = { onClickClearButton }> <DeleteForever /> </Button>
         </Tooltip>
 
-        <Tooltip title = "Remove a Latest Record">
+        <Tooltip title = "1件削除">
           <Button size = "small" onClick = { onClickRemoveButton } > <RemoveCircleOutline /> </Button>
         </Tooltip>
 
-        <Tooltip title = "Create A New Record">
+        <Tooltip title = "新規作成">
           <Button size = "small" onClick = { onClickAddButton } > <AddCircleOutline  /> </Button>
         </Tooltip>
 

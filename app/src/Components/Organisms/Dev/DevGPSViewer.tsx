@@ -42,10 +42,10 @@ export const DevGPSViewer: React.FC = () => {
 
           <CardContent>
             <Typography variant = "h5" component = "div">
-              <GpsFixed /> Get GPS Coordinates
+              <GpsFixed /> GPS Coordinates
             </Typography>
             <Typography variant = "body2" sx = {{ color: 'text.secondary' }}>
-              Get the location coordinates of the device via the browser's geolocation API.
+              GeoAPIから端末の位置情報を取得します。
             </Typography>
           </CardContent>
 
@@ -69,7 +69,7 @@ export const DevGPSViewer: React.FC = () => {
         </CardContent>
 
         <CardActions sx = {{ display: "flex", justifyContent: "flex-end" }}>
-          <Tooltip title = "Get GPS Coordinates">
+          <Tooltip title = "GPS座標を取得">
             <Button size = "large" onClick = { onClickGetGPSCoordsButton } > Go! </Button>
           </Tooltip>
         </CardActions>

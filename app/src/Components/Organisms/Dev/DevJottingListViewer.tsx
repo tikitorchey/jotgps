@@ -4,14 +4,7 @@ import { Table, TableBody, TableCell, TableRow, TableHead } from "@mui/material"
 import { DataArray, ArrowCircleRight, ArrowCircleLeft } from "@mui/icons-material";
 import Jotting from "src/jgEngine/models/jotting";
 
-/**
- * Outline	: XXXするComponent
- * Logic		: - AAAをBBBにする
- *            - 親ComponentからCCCを受け取り、DDDとしたものを子Componentに渡す
- * View			: - KKKをリスト表示する
- */
 
-// Type Declaration of Props
 type Props = {
   jottingList: Array<Jotting>;
 }
