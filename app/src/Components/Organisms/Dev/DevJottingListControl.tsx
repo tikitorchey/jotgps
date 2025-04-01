@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Button, Card, CardContent, Typography, CardActions, Grid2, Tooltip } from "@mui/material";
 import { DataArray, AddCircleOutline, RemoveCircleOutline, DeleteForever } from "@mui/icons-material";
 import { JGEngine } from "../../../jgEngine/jgEngine";
-import { Jotting } from "../../../jgEngine/models/jotting";
+import { Jotting } from "../../../jgEngine/types/jotting";
+import { JottingFactory } from "../../../jgEngine/factories/jottingFactory";
 
 
 type Props = {
@@ -19,23 +20,16 @@ export const DevJottingListControl: React.FC<Props> = ({ jottingList, setJotting
   useEffect( () => { console.log(sampleState) }, [ sampleState ] );
 
   // ___ event handler ___ ___ ___ ___ ___
-  const handleChange = (e : React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value
-    setSampleState(newValue);
-  };
 
   // ___ method ___ ___ ___ ___ ___
-  const test = () => {
-    console.log('test');
-  }
 
   const onClickAddButton = async () => {
 
-    const jotting: Jotting = new Jotting();
+    const jotting: Jotting = JottingFactory.create();
 
     // GPS座標を取得・セット
     const geoPos: GeolocationPosition = await JGEngine.getGPSCoords();
-    jotting.initialize(geoPos);
+    JottingFactory.setGPSCoords(jotting, geoPos);
 
     /** Memo: structuredClone関数によりオブジェクトを複製する理由
      *    Reactはオブジェクト内部の変更を検出できない。

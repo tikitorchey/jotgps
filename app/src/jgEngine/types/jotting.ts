@@ -1,8 +1,12 @@
-import { ulid } from "ulid";
-import { LatLng } from "../types";
+import { LatLng } from "./types";
 
-// GPS座標のレコードおよび周辺情報を集約するクラス
-export class Jotting{
+// GPS座標のレコードおよび周辺情報を集約するオブジェクト
+export type Jotting = {
+
+  /** 
+   *  データ永続化（ex.JSON化）時の利便性を加味して、クラスではなくtypeで実装する
+   *  初期化や各種setterなどの処理は、Factoryクラスのメソッドで実行すること
+   */
 
   /**
    * id :
@@ -23,6 +27,7 @@ export class Jotting{
    *  description:
    *    - Jottingの詳細説明。ユーザーが自由記述欄として自由に使用してもよい
    */
+
   id        : string;
   gpsCoords : LatLng;
   supInfo   : { alt: number | null };
@@ -32,33 +37,6 @@ export class Jotting{
     description : string  | null
   }
 
-  /** Attention:
-   *  コンストラクター呼び出し時には、各種プロパティにデータをセットしないこと
-   *  初期化の際は、本クラスのinitialize関数を用いること
-   */
-  constructor(){
-    this.id         = ulid();
-    this.gpsCoords  = { lat: null, lng: null };
-    this.supInfo    = { alt: null };
-    this.metaData   = {
-      date        : null,
-      title       : null,
-      description : null
-    };
-  }
-
-  /**
-   * GPS座標に関する情報を各プロパティへセットする初期化用の関数
-   * @param geoPos 
-   *  Geolocation APIから取得したオブジェクト
-   */
-  initialize(geoPos: GeolocationPosition){
-    this.gpsCoords.lat  = geoPos.coords.latitude;
-    this.gpsCoords.lng  = geoPos.coords.longitude;
-    this.supInfo.alt    = geoPos.coords.altitude;
-    this.metaData.date  = Date.now();
-  }
-  
 }
 
 export default Jotting;

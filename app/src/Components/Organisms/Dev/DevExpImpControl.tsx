@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Button, Card, CardContent, Tooltip, Typography, CardActions } from "@mui/material";
 import { ImportExport, FileUpload, FileDownload } from "@mui/icons-material";
 import { JGEngine } from "../../../jgEngine/jgEngine";
-import Jotting from "../../../jgEngine/models/jotting";
+import Jotting from "../../../jgEngine/types/jotting";
 
 
 const FILE_NAME: string = "jotgps";

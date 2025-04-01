@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Button, Box, Card, CardContent, Typography, CardActions, CardActionArea, Grid2, Tooltip } from "@mui/material";
 import { Storage, Save, BrowserUpdated } from "@mui/icons-material";
 import { JGEngine } from "../../../jgEngine/jgEngine";
-import { Jotting } from "../../../jgEngine/models/jotting";
+import { Jotting } from "../../../jgEngine/types/jotting";
 
 /**
  * Outline	: XXXするComponent

@@ -1,6 +1,6 @@
 import Utils from "./utils";
 import IDBHandler from "./dataPerpetuations/iDBHandler";
-import Jotting from "./models/jotting";
+import Jotting from "./types/jotting";
 import { StoreName } from "./dataPerpetuations/iDBSchema";
 
 const IDB_STORENAME_JOTTING: StoreName = "jotting";
