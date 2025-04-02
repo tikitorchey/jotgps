@@ -22,8 +22,6 @@ export class JGEngine{
     // ブラウザのGeoAPI対応可否の確認
     if("geolocation" in navigator){
 
-      this.handleGPSPermission();
-
       // 呼び出し元からエラーコールバックが設定されていない場合は、汎用のエラーハンドリングを設定する
       if(!errorCallback){
         errorCallback = (error: GeolocationPositionError) => {
@@ -129,21 +127,6 @@ export class JGEngine{
       func(data);
     }
     IDBHandler.readTargetRecordsByKey(IDB_STORENAME_JOTTING, tardetKeys, successCallback);
-  }
-
-  static handleGPSPermission(){
-
-    // 参考: https://developer.mozilla.org/en-US/docs/Web/API/Permissions_API/Using_the_Permissions_API
-    navigator.permissions.query({ name: "geolocation" }).then((result) => {
-      if (result.state === "granted") {
-        ;   // 空分
-      } else if (result.state === "prompt") {
-        ;   // 空分
-      } else if (result.state === "denied") {
-        alert("位置情報へのアクセスが拒否されています。本機能をご利用いただく場合は、ご利用のブラウザの権限付与設定にて、本サイトにアクセス許可を設定してください。");
-      }
-    });
-
   }
 
 }

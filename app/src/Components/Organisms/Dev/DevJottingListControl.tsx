@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button, Card, CardContent, Typography, CardActions, Grid2, Tooltip } from "@mui/material";
 import { DataArray, AddCircleOutline, RemoveCircleOutline, DeleteForever } from "@mui/icons-material";
 import { JGEngine } from "../../../jgEngine/jgEngine";
+import { UXSupport } from "../../../jgEngine/uxSupport";
 import { Jotting } from "../../../jgEngine/types/jotting";
 import { JottingFactory } from "../../../jgEngine/factories/jottingFactory";
 
@@ -25,11 +26,15 @@ export const DevJottingListControl: React.FC<Props> = ({ jottingList, setJotting
 
   const onClickAddButton = () => {
 
+    // GPS機能の許可ステータスをアナウンス
+    // 権限要求を拒否した場合の、レスポンス喪失を防ぐために実行する
+    UXSupport.handleGPSPermission();
+
     // GPS座標の取得成功時の処理
     const successCallback: PositionCallback = (geoPos: GeolocationPosition) => {
 
       const jotting: Jotting = JottingFactory.create();
-      
+
       JottingFactory.setGPSCoords(jotting, geoPos);
 
       /** Memo: structuredClone関数によりオブジェクトを複製する理由
