@@ -23,22 +23,27 @@ export const DevJottingListControl: React.FC<Props> = ({ jottingList, setJotting
 
   // ___ method ___ ___ ___ ___ ___
 
-  const onClickAddButton = async () => {
+  const onClickAddButton = () => {
 
-    const jotting: Jotting = JottingFactory.create();
+    // GPS座標の取得成功時の処理
+    const successCallback: PositionCallback = (geoPos: GeolocationPosition) => {
+
+      const jotting: Jotting = JottingFactory.create();
+      
+      JottingFactory.setGPSCoords(jotting, geoPos);
+
+      /** Memo: structuredClone関数によりオブジェクトを複製する理由
+       *    Reactはオブジェクト内部の変更を検出できない。
+       *    そこで、オブジェクト自体を複製することでオブジェクトIDを変えることで変更を検出させている
+       */
+      const clonedList = structuredClone(jottingList);
+      clonedList.push(jotting);
+  
+      setJottingList(clonedList);
+    }
 
     // GPS座標を取得・セット
-    const geoPos: GeolocationPosition = await JGEngine.getGPSCoords();
-    JottingFactory.setGPSCoords(jotting, geoPos);
-
-    /** Memo: structuredClone関数によりオブジェクトを複製する理由
-     *    Reactはオブジェクト内部の変更を検出できない。
-     *    そこで、オブジェクト自体を複製することでオブジェクトIDを変えることで変更を検出させている
-     */
-    const clonedList = structuredClone(jottingList);
-    clonedList.push(jotting);
-
-    setJottingList(clonedList);
+    JGEngine.getGPSCoords(successCallback);
 
   }
 

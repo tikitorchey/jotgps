@@ -26,11 +26,14 @@ export const DevGPSViewer: React.FC = () => {
     console.log('test');
   }
   
-  const onClickGetGPSCoordsButton = async () => {
+  const onClickGetGPSCoordsButton = () => {
 
-    const geoPos: GeolocationPosition = await JGEngine.getGPSCoords();
-    const gpsCoords: LatLng = { lat: geoPos.coords.latitude, lng: geoPos.coords.longitude }
-    setGPSCoords(gpsCoords);
+    const successCallback: PositionCallback = (geoPos: GeolocationPosition) => {
+      const gpsCoords: LatLng = { lat: geoPos.coords.latitude, lng: geoPos.coords.longitude }
+      setGPSCoords(gpsCoords);
+    }
+
+    JGEngine.getGPSCoords(successCallback);
     
   }
 

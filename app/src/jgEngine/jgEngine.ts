@@ -8,22 +8,35 @@ const IDB_STORENAME_JOTTING: StoreName = "jotting";
 export class JGEngine{
 
   /**
-   * 端末が位置するGPS座標（緯度経度系）を端末から取得する関数
+   * 端末のGPS座標（緯度経度系）を取得する関数
+   * 座標取得に成功/失敗時に各コールバックを実行する
    * 
    * @remarks
    *  GPS座標の取得にはGeolocationAPIを利用
    *  GeolocationAPIの利用はsecure origins(https://goo.gl/Y0ZkNV)からの呼び出しが必要となる
    *  例えばhttps通信やlocalhostでの接続がこれに該当する
    * 
-   * @returns
-   *  [ToDo: 追記]
    */
-  static getGPSCoords(): Promise<GeolocationPosition>{
+  static getGPSCoords(successCallback: PositionCallback, errorCallback?: PositionErrorCallback): void{
 
-    // GeolocationAPIより現在地の座標を取得
-    return new Promise( (successCallback, errorCallback) => {
+    // ブラウザのGeoAPI対応可否の確認
+    if("geolocation" in navigator){
+
+      this.handleGPSPermission();
+
+      // 呼び出し元からエラーコールバックが設定されていない場合は、汎用のエラーハンドリングを設定する
+      if(!errorCallback){
+        errorCallback = (error: GeolocationPositionError) => {
+          console.debug(error);
+        }
+      }
+
+      // GeolocationAPIより現在地の座標を取得
       navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
-    } );
+
+    }else{
+      alert("ご利用のブラウザはGPS座標の所得に対応していない可能性があります。");
+    }
     
   }
 
@@ -116,6 +129,21 @@ export class JGEngine{
       func(data);
     }
     IDBHandler.readTargetRecordsByKey(IDB_STORENAME_JOTTING, tardetKeys, successCallback);
+  }
+
+  static handleGPSPermission(){
+
+    // 参考: https://developer.mozilla.org/en-US/docs/Web/API/Permissions_API/Using_the_Permissions_API
+    navigator.permissions.query({ name: "geolocation" }).then((result) => {
+      if (result.state === "granted") {
+        ;   // 空分
+      } else if (result.state === "prompt") {
+        ;   // 空分
+      } else if (result.state === "denied") {
+        alert("位置情報へのアクセスが拒否されています。本機能をご利用いただく場合は、ご利用のブラウザの権限付与設定にて、本サイトにアクセス許可を設定してください。");
+      }
+    });
+
   }
 
 }
