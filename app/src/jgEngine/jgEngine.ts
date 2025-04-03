@@ -4,6 +4,7 @@ import Jotting from "./types/jotting";
 import { StoreName } from "./dataPerpetuations/iDBSchema";
 
 const IDB_STORENAME_JOTTING: StoreName = "jotting";
+const MSG_NAV_GEOAPI_UNSUPPORTED_JPN: string = "ご利用のブラウザはGPS座標の所得に対応していない可能性があります。";
 
 export class JGEngine{
 
@@ -24,16 +25,17 @@ export class JGEngine{
 
       // 呼び出し元からエラーコールバックが設定されていない場合は、汎用のエラーハンドリングを設定する
       if(!errorCallback){
-        errorCallback = (error: GeolocationPositionError) => {
+        const generalErrorCallback = (error: GeolocationPositionError) => {
           console.debug(error);
         }
+        errorCallback = generalErrorCallback;
       }
 
       // GeolocationAPIより現在地の座標を取得
       navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
 
     }else{
-      alert("ご利用のブラウザはGPS座標の所得に対応していない可能性があります。");
+      alert(MSG_NAV_GEOAPI_UNSUPPORTED_JPN);
     }
     
   }
