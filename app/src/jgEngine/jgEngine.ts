@@ -46,17 +46,57 @@ export class JGEngine{
    * @param targetData JSONファイルへ変換するJavaScriptオブジェクト
    * @param fileName 出力するJSONファイルの名前 拡張子を除いた部分とすること
    */
-  static async exportJSON(targetData: Object, fileName: string){
-    JSONHandler.exportJSON(targetData, fileName);
+  static async exportJottings(targetData: Object, fileName: string): Promise<void>{
+
+    try{
+
+      await JSONHandler.exportJSON(targetData, fileName);
+
+    } catch (e) {
+
+      /** Memo: Errorの種類
+       * AbortError ... ユーザーがファイル選択をキャンセルした際に発生するエラー
+       */
+      if ( (e instanceof Error) && (e.name === 'AbortError')) {
+        throw e;
+      } else {
+        throw e;
+      }
+
+    }
+
   }
 
   /**
-   * JSONファイルを読み込みJavaScriptオブジェクトへ変換し返すメソッド
-   * @returns JavaScriptオブジェクトへ変換されたJSONデータ
+   * JSONファイルを読み込みJottingのリストへ復元するメソッド
+   * @returns JSONから復元されたJottingのリスト
    */
-  static async importJSON(): Promise<Object>{
-    const jsObject = JSONHandler.importJSON();
-    return jsObject;
+  static async importJottings(): Promise<Array<Jotting>>{
+
+    try{
+
+      const jsObject          = await JSONHandler.importJSON();
+      const importedJottings  = jsObject as Array<Jotting>;
+
+      /** Todo:
+       *    フォーマットのチェック処理を追加
+       */
+
+      return importedJottings;
+
+    } catch (e) {
+
+      /** Memo: Errorの種類
+       * AbortError ... ユーザーがファイル選択をキャンセルした際に発生するエラー
+       */
+      if ( (e instanceof Error) && (e.name === 'AbortError')) {
+        throw e;
+      } else {
+        throw e;
+      }
+
+    }
+
   }
 
   static iDBCreateJottings(jottingToSave: Array<Jotting>){

@@ -1,13 +1,11 @@
+/**
+ * 汎用メソッドを一時的に集約するクラス
+ * 本クラスは実運用されるプログラム内での使用を避けること
+ * 基本は開発用途、特に一時的なものに限定する
+ */
 export class Utils{
 
-  /** ToDo:
-   * Utilsというクラスおよびフォルダは利用目的が判然としないため、
-   * 避けることが望ましい。要改修。
-   */
-
-  constructor(){
-
-  }
+  constructor(){ }
 
   /**
    * ファイルピッカーを表示し、ユーザーが選択したファイルを呼び出し元に返すメソッド
@@ -15,15 +13,14 @@ export class Utils{
    */
   static async getFile(): Promise<File> {
 
-    // ToDo: ファイルを選択せずにファイルピッカーを閉じた場合のハンドリングを実装
-
-    // ファイルピッカーを開き、結果を分解して最初のハンドルを取り出す
     /** Ref:
      *    引用元: https://developer.mozilla.org/ja/docs/Web/API/File_System_API
      */
-    const [ fileHandle ] = await window.showOpenFilePicker();
-    const file           = await fileHandle.getFile();
+
+    const [ fileHandle ] = await window.showOpenFilePicker();   // ファイルピッカーを開く（ファイルアクセス権を取得）
+    const file           = await fileHandle.getFile();          // ファイルを取得
     return file;
+    
   }
 
   /**
@@ -54,15 +51,13 @@ export class Utils{
   static async writeBlob(blob: Blob, saveOptions: SaveFilePickerOptions): Promise<void>{
 
     // 出力先のローカルディレクトリを選択するダイアログを表示
-    /** ToDo: DOMExceptionのエラーハンドリングを実装
-     *    ディレクトリ選択をキャンセルした場合にエラーが発生する
-     */
     const fileHandle: FileSystemFileHandle = await window.showSaveFilePicker(saveOptions);
 
     // ファイルを出力
     const fileStream: FileSystemWritableFileStream = await fileHandle.createWritable();
     await fileStream.write(blob);
     await fileStream.close();
+    
   }
 
 }

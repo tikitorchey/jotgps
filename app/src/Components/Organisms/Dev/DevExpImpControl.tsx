@@ -37,13 +37,24 @@ export const DevExpImpControl: React.FC<Props> = ({ jottingList, setJottingList 
   }
 
   const onClickImportButton = async () => {
-    const importedJSON      = await JGEngine.importJSON();
-    const importedJottings  = importedJSON as Array<Jotting>;
-    setJottingList(importedJottings);
+
+    try {
+      const importedJottings = await JGEngine.importJottings();
+      setJottingList(importedJottings);
+    } catch(e) {
+      ;      
+    }
+
   }
 
   const onClickExportButton = async () => {
-    await JGEngine.exportJSON(jottingList, FILE_NAME);
+
+    try{
+      await JGEngine.exportJottings(jottingList, FILE_NAME);
+    } catch(e) {
+      ;
+    }
+    
   }
 
   return (

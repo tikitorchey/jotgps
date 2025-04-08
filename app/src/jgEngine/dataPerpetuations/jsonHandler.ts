@@ -1,5 +1,3 @@
-import Utils from "../utils";
-
 export class JSONHandler{
 
   constructor(){}
@@ -9,10 +7,22 @@ export class JSONHandler{
    * @param targetData JSONファイルへ変換するJavaScriptオブジェクト
    * @param fileName 出力するJSONファイルの名前 拡張子を除いた部分とすること
    */
-  static async exportJSON(targetData: Object, fileName: string){
+  static async exportJSON(targetData: Object, fileName: string): Promise<void>{
 
     // ブラウザのFile System API対応状況に応じて処理方式を変更（対応時の処理方式を基本とする）
     if("showSaveFilePicker" in window){   // File System API対応
+
+      const writeBlob = async (blob: Blob, saveOptions: SaveFilePickerOptions): Promise<void> => {
+
+        // 出力先のローカルディレクトリを選択するダイアログを表示
+        const fileHandle: FileSystemFileHandle = await window.showSaveFilePicker(saveOptions);
+    
+        // ファイルを出力
+        const fileStream: FileSystemWritableFileStream = await fileHandle.createWritable();
+        await fileStream.write(blob);
+        await fileStream.close();
+        
+      }
 
       // JacaScriptオブジェクトをBLOB（JSONファイル）へ変換
       const blob = new Blob([ JSON.stringify(targetData) ], { type: 'application\/json' });
@@ -23,7 +33,8 @@ export class JSONHandler{
         types         : [ { accept : { "application/json": [ ".json" ] } } ]
       }
 
-      Utils.writeBlob(blob, saveOptions);
+      await writeBlob(blob, saveOptions);
+
     }else{    // File System API非対応
 
       /** Policy: 
@@ -48,7 +59,7 @@ export class JSONHandler{
 
       // URLをメモリから解放
       URL.revokeObjectURL(url);
-      
+
     }
   
   }
@@ -59,17 +70,52 @@ export class JSONHandler{
    */
   static async importJSON(): Promise<Object>{
 
+    const getFile = async (): Promise<File> => {
+
+      const OPTIONS: OpenFilePickerOptions = {
+        types: [
+          {
+            description : "Application Records File",
+            accept      : {
+              "application/json": [ ".json" ],
+            },
+          },
+        ],
+        excludeAcceptAllOption  : false,
+        multiple                : false,
+      };
+  
+      const [ fileHandle ] = await window.showOpenFilePicker(OPTIONS);    // ファイルピッカーを開く（ファイルアクセス権を取得）
+      const file           = await fileHandle.getFile();                  // ファイルを取得
+      return file;
+      
+    }
+
+    const readTextFile = async (file: File): Promise<string> => {
+
+      /** ToDo: 引数として渡されたファイルのバリデーションチェックの実装
+       * 
+       */
+      const arrayBuffer : ArrayBuffer = await file.arrayBuffer();
+  
+      const textDecoder : TextDecoder = new TextDecoder();
+      const text        : string      = textDecoder.decode(arrayBuffer);
+  
+      return text;
+    }
+
     // ユーザーからの入力ファイルを取得
-    const file: File = await Utils.getFile();
+    const file: File = await getFile();
 
     // ファイルを読込み（入力ファイルを文字列へと解読）
-    const jsonText: string = await Utils.readTextFile(file);
+    const jsonText: string = await readTextFile(file);
 
     // JSON文字列からJavaScriptオブジェクトを生成
     /** ToDo: JSONとして成立しているファイルか検証する処理を追加 */
     const jsObject: Object = JSON.parse(jsonText);
 
     return jsObject;
+
   }
 
 }
