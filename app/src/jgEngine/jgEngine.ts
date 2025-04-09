@@ -1,7 +1,6 @@
-import Utils from "./utils";
-import IDBHandler from "./dataPerpetuations/iDBHandler";
+import IDBHandler from "./dataPerpetuations/iDB/iDBHandler";
 import Jotting from "./types/jotting";
-import { StoreName } from "./dataPerpetuations/iDBSchema";
+import { StoreName } from "./dataPerpetuations/iDB/iDBSchema";
 import { JSONHandler } from "./dataPerpetuations/jsonHandler";
 
 const IDB_STORENAME_JOTTING: StoreName = "jotting";
