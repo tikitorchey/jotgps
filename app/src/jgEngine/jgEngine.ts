@@ -1,7 +1,7 @@
 import IDBHandler from "./dataPerpetuations/iDB/iDBHandler";
 import Jotting from "./types/jotting";
 import { StoreName } from "./dataPerpetuations/iDB/iDBSchema";
-import { JSONHandler } from "./dataPerpetuations/jsonHandler";
+import { JSONHandler } from "./dataPerpetuations/json/jsonHandler";
 
 const IDB_STORENAME_JOTTING: StoreName = "jotting";
 const MSG_NAV_GEOAPI_UNSUPPORTED_JPN: string = "ご利用のブラウザはGPS座標の所得に対応していない可能性があります。";
