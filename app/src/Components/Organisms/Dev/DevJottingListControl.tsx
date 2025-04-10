@@ -59,7 +59,7 @@ export const DevJottingListControl: React.FC<Props> = ({ jottingList, setJotting
 
   const onClickRemoveButton = () => {
 
-      /** Memo: structuredClone関数によりオブジェクトを複製する理由
+    /** Memo: structuredClone関数によりオブジェクトを複製する理由
      *    Reactはオブジェクト内部の変更を検出できない。
      *    そこで、オブジェクト自体を複製することでオブジェクトIDを変えることで変更を検出させている
      */
@@ -86,15 +86,15 @@ export const DevJottingListControl: React.FC<Props> = ({ jottingList, setJotting
       <CardActions sx = {{ display: "flex", justifyContent: "flex-end" }}>
 
         <Tooltip title = "全件削除">
-          <Button size = "small" onClick = { onClickClearButton }> <DeleteForever /> </Button>
+          <Button size = "small" onClick = { onClickClearButton }> <DeleteForever  color = "secondary"/> </Button>
         </Tooltip>
 
         <Tooltip title = "1件削除">
-          <Button size = "small" onClick = { onClickRemoveButton } > <RemoveCircleOutline /> </Button>
+          <Button size = "small" onClick = { onClickRemoveButton } > <RemoveCircleOutline/> </Button>
         </Tooltip>
 
         <Tooltip title = "新規作成">
-          <Button size = "small" onClick = { onClickAddButton } > <AddCircleOutline  /> </Button>
+          <Button size = "small" onClick = { onClickAddButton } > <AddCircleOutline/> </Button>
         </Tooltip>
 
       </CardActions>

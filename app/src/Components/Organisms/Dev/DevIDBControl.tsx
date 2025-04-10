@@ -40,16 +40,34 @@ export const DevIDBControl: React.FC<Props> = ({ jottingList, setJottingList }) 
   }
 
   const onClickDBReadAllButton = async () => {
-    JGEngine.iDBReadAllJottings(setJottingList);
+
+    // 取得したレコードをUI上に読み込み済みのレコード一覧に追加する処理
+    const addReadRecords = (readRecords: Array<any>) => {
+      const clonedList = structuredClone(jottingList);
+      readRecords.forEach( (record: any) => { clonedList.push(record) } );
+      setJottingList(clonedList);
+    }
+
+    JGEngine.iDBReadAllJottings(addReadRecords);
   }
 
   const onClickDBReadTargetButton = async () => {
+
+    // 取得するレコードのキーのリストを作成
     const targetKeys: Array<string> = [];
     const push = (ref: React.RefObject<HTMLInputElement | null>) => {
-      if(ref.current?.value){ targetKeys.push(ref.current?.value); }
+      if(ref.current?.value){ targetKeys.push(ref.current?.value); }    // UIに入力値がある場合はリストに追加
     }
-    [inputRefTargetKey1, inputRefTargetKey2, inputRefTargetKey3].forEach( (ref) => { push(ref); } )
-    JGEngine.iDBReadJottingsByKey(targetKeys, setJottingList);
+    [ inputRefTargetKey1, inputRefTargetKey2, inputRefTargetKey3] .forEach( (ref) => { push(ref); } )
+
+    // 取得したレコードをUI上に読み込み済みのレコード一覧に追加する処理
+    const addReadRecords = (readRecords: Array<any>) => {
+      const clonedList = structuredClone(jottingList);
+      readRecords.forEach( (record: any) => { clonedList.push(record) } );
+      setJottingList(clonedList);
+    }
+
+    JGEngine.iDBReadJottingsByKey(targetKeys, addReadRecords);
   }
 
   const onClickFactoryResetButton = async () => {
@@ -73,16 +91,16 @@ export const DevIDBControl: React.FC<Props> = ({ jottingList, setJottingList }) 
 
       <CardActions sx = {{ display: "flex", justifyContent: "flex-end" }}>
 
+        <Tooltip title = "IndexDBをファクトリーリセット">
+          <Button onClick = { onClickFactoryResetButton }> <DeleteForever color = "secondary" /> </Button>
+        </Tooltip>
+
         <Tooltip title = "IndexedDBへ保存">
-          <Button size = "small" onClick = { onClickDBSaveButton }> <Save /> </Button>
+          <Button size = "small" onClick = { onClickDBSaveButton }> <Save/> </Button>
         </Tooltip>
 
         <Tooltip title = "IndexDBから読み込み">
-          <Button size = "small" onClick = { onClickDBReadAllButton }> <BrowserUpdated /> </Button>
-        </Tooltip>
-
-        <Tooltip title = "IndexDBをファクトリーリセット">
-          <Button onClick = { onClickFactoryResetButton }> <DeleteForever color = "secondary" /> </Button>
+          <Button size = "small" onClick = { onClickDBReadAllButton }> <BrowserUpdated/> </Button>
         </Tooltip>
 
       </CardActions>

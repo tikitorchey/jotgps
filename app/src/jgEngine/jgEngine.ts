@@ -112,16 +112,16 @@ export class JGEngine{
     IDBHandler.createRecords(IDB_STORENAME_JOTTING, jottingToSave, successCallback);
   }
 
-  static iDBReadAllJottings(func: (data: any) => void){
-    const successCallback = (data: any) => {
-      func(data);
+  static iDBReadAllJottings(func: (records: Array<any>) => void){
+    const successCallback = (records: Array<any>) => {
+      func(records);
     }
     IDBHandler.readAllRecords(IDB_STORENAME_JOTTING, successCallback);
   }
 
-  static iDBReadJottingsByKey(tardetKeys: Array<string>, func: (data: any) => void){
-    const successCallback = (data: any) => {
-      func(data);
+  static iDBReadJottingsByKey(tardetKeys: Array<string>, func: (records: Array<any>) => void){
+    const successCallback = (records: Array<any>) => {
+      func(records);
     }
     IDBHandler.readRecordsByKey(IDB_STORENAME_JOTTING, tardetKeys, successCallback);
   }

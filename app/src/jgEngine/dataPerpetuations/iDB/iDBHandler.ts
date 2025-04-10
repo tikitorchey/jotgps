@@ -224,7 +224,7 @@ export class IDBHandler{
    * @param successCallback 
    */
   static async readRecordsByKey(targetStoreName: StoreName, targetKeys: Array<string>, 
-    successCallback: (data: Array<any>) => void){
+    successCallback: (records: Array<any>) => void){
 
     /**
      * レコード取得が全件終了した際（transaction.oncomplete時）に、引数として入力されたコールバック関数を実行する
@@ -291,7 +291,7 @@ export class IDBHandler{
    * @param successCallback レコードの取得が成功した際に実行されるコールバック関数
    */
   static async readAllRecords(targetStoreName: StoreName,
-    successCallback: (data: any) => void){
+    successCallback: (records: Array<any>) => void){
 
     /**
      * レコード取得が全件終了した際（transaction.oncomplete時）に、引数として入力されたコールバック関数を実行する
