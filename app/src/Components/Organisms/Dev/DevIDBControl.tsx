@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Button, Box, Card, CardContent, Typography, CardActions, CardActionArea, Grid2, Tooltip } from "@mui/material";
+import { Button, Card, CardContent, Grid2, Divider, TextField, Typography, CardActions, Tooltip } from "@mui/material";
 import { Storage, Save, BrowserUpdated, DeleteForever } from "@mui/icons-material";
 import { JGEngine } from "../../../jgEngine/jgEngine";
 import { Jotting } from "../../../jgEngine/types/jotting";
@@ -22,14 +22,15 @@ export const DevIDBControl: React.FC<Props> = ({ jottingList, setJottingList }) 
   // ___ state ___ ___ ___ ___ ___
   const [ sampleState, setSampleState ] = useState<string>('This is SampleState');
 
+  // ___ use ref ___ ___ ___ ___ ___
+  const inputRefTargetKey1 = useRef<HTMLInputElement>(null);
+  const inputRefTargetKey2 = useRef<HTMLInputElement>(null);
+  const inputRefTargetKey3 = useRef<HTMLInputElement>(null);
+  
   // ___ use effect ___ ___ ___ ___ ___
   useEffect( () => { console.log(sampleState) }, [ sampleState ] );
 
   // ___ event handler ___ ___ ___ ___ ___
-  const handleChange = (e : React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value
-    setSampleState(newValue);
-  };
 
   // ___ method ___ ___ ___ ___ ___
 
@@ -43,8 +44,12 @@ export const DevIDBControl: React.FC<Props> = ({ jottingList, setJottingList }) 
   }
 
   const onClickDBReadTargetButton = async () => {
-    const TARGET_KEYS = [ "01JMC2RCVXYPBVVWP824Q46HJZ" ];
-    JGEngine.iDBReadTargetJottings(TARGET_KEYS, setJottingList);
+    const targetKeys: Array<string> = [];
+    const push = (ref: React.RefObject<HTMLInputElement | null>) => {
+      if(ref.current?.value){ targetKeys.push(ref.current?.value); }
+    }
+    [inputRefTargetKey1, inputRefTargetKey2, inputRefTargetKey3].forEach( (ref) => { push(ref); } )
+    JGEngine.iDBReadJottingsByKey(targetKeys, setJottingList);
   }
 
   const onClickFactoryResetButton = async () => {
@@ -64,6 +69,8 @@ export const DevIDBControl: React.FC<Props> = ({ jottingList, setJottingList }) 
         </Typography>
       </CardContent>
 
+      <Divider />
+
       <CardActions sx = {{ display: "flex", justifyContent: "flex-end" }}>
 
         <Tooltip title = "IndexedDBへ保存">
@@ -76,6 +83,24 @@ export const DevIDBControl: React.FC<Props> = ({ jottingList, setJottingList }) 
 
         <Tooltip title = "IndexDBをファクトリーリセット">
           <Button onClick = { onClickFactoryResetButton }> <DeleteForever color = "secondary" /> </Button>
+        </Tooltip>
+
+      </CardActions>
+
+      <Divider />
+
+      <CardActions sx = {{ display: "flex", justifyContent: "flex-end" }}>
+
+        <Grid2 container spacing = { 1 }>
+          <TextField label = "Target ID" variant = "outlined" sx = {{ marginRight: "auto" }} inputRef = { inputRefTargetKey1 }/>
+          <TextField label = "Target ID" variant = "outlined" sx = {{ marginRight: "auto" }} inputRef = { inputRefTargetKey2 }/>
+          <TextField label = "Target ID" variant = "outlined" sx = {{ marginRight: "auto" }} inputRef = { inputRefTargetKey3 }/>
+        </Grid2>
+        
+        <Divider orientation = "vertical" flexItem />
+
+        <Tooltip title = "IndexDBから読み込み">
+          <Button size = "small" onClick = { onClickDBReadTargetButton }> <BrowserUpdated /> </Button>
         </Tooltip>
 
       </CardActions>

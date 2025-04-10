@@ -119,11 +119,11 @@ export class JGEngine{
     IDBHandler.readAllRecords(IDB_STORENAME_JOTTING, successCallback);
   }
 
-  static iDBReadTargetJottings(tardetKeys: Array<string>, func: (data: any) => void){
+  static iDBReadJottingsByKey(tardetKeys: Array<string>, func: (data: any) => void){
     const successCallback = (data: any) => {
       func(data);
     }
-    IDBHandler.readTargetRecordsByKey(IDB_STORENAME_JOTTING, tardetKeys, successCallback);
+    IDBHandler.readRecordsByKey(IDB_STORENAME_JOTTING, tardetKeys, successCallback);
   }
 
 }
