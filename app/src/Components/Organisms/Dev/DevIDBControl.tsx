@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Button, Box, Card, CardContent, Typography, CardActions, CardActionArea, Grid2, Tooltip } from "@mui/material";
-import { Storage, Save, BrowserUpdated } from "@mui/icons-material";
+import { Storage, Save, BrowserUpdated, DeleteForever } from "@mui/icons-material";
 import { JGEngine } from "../../../jgEngine/jgEngine";
 import { Jotting } from "../../../jgEngine/types/jotting";
 
@@ -32,23 +32,24 @@ export const DevIDBControl: React.FC<Props> = ({ jottingList, setJottingList }) 
   };
 
   // ___ method ___ ___ ___ ___ ___
-  const test = () => {
-    console.log('test');
+
+  const onClickDBSaveButton = async () => {
+    const mockFunc = () => { ; }
+    JGEngine.iDBCreateJottings(jottingList, mockFunc);
   }
 
-  const onClickDBSaveTestButton = async () => {
-    JGEngine.iDBCreateJottings(jottingList);
-  }
-
-  const onClickDBReadAllTestButton = async () => {
+  const onClickDBReadAllButton = async () => {
     JGEngine.iDBReadAllJottings(setJottingList);
   }
 
-  const onClickDBReadTargetTestButton = async () => {
-    const TARGET_KEYS = ["01JMC2RCVXYPBVVWP824Q46HJZ"];
+  const onClickDBReadTargetButton = async () => {
+    const TARGET_KEYS = [ "01JMC2RCVXYPBVVWP824Q46HJZ" ];
     JGEngine.iDBReadTargetJottings(TARGET_KEYS, setJottingList);
   }
 
+  const onClickFactoryResetButton = async () => {
+    JGEngine.iDBfactoryReset();
+  }
 
   return (
     <Card variant = "outlined"  sx = {{ height: "100%" }}>
@@ -58,7 +59,7 @@ export const DevIDBControl: React.FC<Props> = ({ jottingList, setJottingList }) 
           <Storage /> IndexedDB
         </Typography>
         <Typography variant = "body2" sx = {{ color: 'text.secondary' }}>
-          UI上に読み込まれたレコードをIndexedDBへ保存します。また、IndexedDBからUI上へレコードを読み込みます。
+          UIとIndexedDB間の連携処理を実行します。
           * To check the database directly, go to Developer mode(F12 key) {'>'} Application Tab {`>`} Storage Tab {`>`} IndexedDB (in Chrome environment)
         </Typography>
       </CardContent>
@@ -66,11 +67,15 @@ export const DevIDBControl: React.FC<Props> = ({ jottingList, setJottingList }) 
       <CardActions sx = {{ display: "flex", justifyContent: "flex-end" }}>
 
         <Tooltip title = "IndexedDBへ保存">
-          <Button size = "small" onClick = { onClickDBSaveTestButton }> <Save /> </Button>
+          <Button size = "small" onClick = { onClickDBSaveButton }> <Save /> </Button>
         </Tooltip>
 
         <Tooltip title = "IndexDBから読み込み">
-          <Button size = "small" onClick = { onClickDBReadAllTestButton }> <BrowserUpdated /> </Button>
+          <Button size = "small" onClick = { onClickDBReadAllButton }> <BrowserUpdated /> </Button>
+        </Tooltip>
+
+        <Tooltip title = "IndexDBをファクトリーリセット">
+          <Button onClick = { onClickFactoryResetButton }> <DeleteForever color = "secondary" /> </Button>
         </Tooltip>
 
       </CardActions>

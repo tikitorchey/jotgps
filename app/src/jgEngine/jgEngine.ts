@@ -98,8 +98,18 @@ export class JGEngine{
 
   }
 
-  static iDBCreateJottings(jottingToSave: Array<Jotting>){
-    IDBHandler.createRecords(IDB_STORENAME_JOTTING, jottingToSave);
+  static async iDBfactoryReset(func?: () => void){
+    const successCallback = () => {
+      if(func){ func(); }
+    }
+    IDBHandler.factoryReset(successCallback);
+  }
+
+  static iDBCreateJottings(jottingToSave: Array<Jotting>, func?: () => void){
+    const successCallback = () => {
+      if(func){ func(); }
+    }
+    IDBHandler.createRecords(IDB_STORENAME_JOTTING, jottingToSave, successCallback);
   }
 
   static iDBReadAllJottings(func: (data: any) => void){

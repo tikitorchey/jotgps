@@ -1,4 +1,4 @@
-import { IDB_SCHEMA, StoreName} from "./iDBSchema";
+import { IDB_SCHEMA, StoreName } from "./iDBSchema";
 
 export class IDBHandler{
 
@@ -6,12 +6,23 @@ export class IDBHandler{
 
   }
 
+  /** Memo: 実装メソッドの概要
+   *    - manipulate: 共通処理（トランザクションの死活管理など）をラップするメソッド
+   *    - 全件処理系 
+   *      - readAllRecords   : 全件読み込み
+   *      - deleteAllRecords : 全件削除
+   *    - 複数処理系
+   *      - createRecords             : 作成兼更新
+   *      - readTargetRecordsByKey    : 複数件取得（キー指定）
+   *      - deleteTargetRecordsByKey  : 複数件削除（キー指定）
+   */
+
   /**
    * indexedDBを操作するためのラッパーメソッド
    *  イベントハンドラーを引数として受け付ける
    *  indexedDBへの正常なアクセスを保証したうえで、イベントハンドラーを実行する
    *  indexedDB利用時は必ず本メソッドを介してDBを利用すること
-   *  本メソッドにDB利用前の検証チェック工程を内包する
+   *  本メソッドにDB利用前の初期化・検証チェック工程を内包する
    * @param successCallback DBアクセス成功時に実行されるコールバック関数
    *    第1引数にindexedDBオブジェクトを受け付ける（コールバック実行時に自動的に注入される）
    *    第2引数以降に任意で使用できる残余引数を受け付ける
@@ -72,63 +83,23 @@ export class IDBHandler{
 
   }
 
-  /**
-   * 指定したオブジェクトストアへデータを保存するメソッド
-   * @param targetStoreName データを保存するオブジェクトストアの名前
-   * @param dataToSave      保存するデータ
-   */
-  static createRecords(targetStoreName: StoreName, dataToSave: Array<any>){
-    
-    const TRANSACTION_MODE: IDBTransactionMode  = "readwrite";    // 保存操作の場合はreadwriteモードで固定
+  static async factoryReset(successCallback?: () => void){
 
-    const createCallback = (iDB: IDBDatabase) => {
+    const targetDBName: string = IDB_SCHEMA.DB_NAME;      // ストア定義から現行のDB名を取得
 
-      // トランザクションを開始 アクセス対象のストアを指定
-      const transaction: IDBTransaction = iDB.transaction(targetStoreName, TRANSACTION_MODE);
+    /**
+     * DBの削除が全件終了した際（transaction.oncomplete時）に、引数として入力されたコールバック関数を実行する
+     */
 
-      // アクセス対象のストアを取得
-      const store: IDBObjectStore = transaction.objectStore(targetStoreName);
+    const DBDeleteRequest = window.indexedDB.deleteDatabase(targetDBName);
 
-      // 各データごとにトランザクションを実行
-      dataToSave.forEach((data) => {
-
-        // トランザクションを実行
-        /** Policy: データ重複時の対応
-         *    既存のデータと競合した場合は、UIにセットされているデータを正として扱い、これで上書きをする
-         */
-        /** Memo: addとputの違い
-         *    iDBへのデータ保存メソッドにはaddとputが存在する
-         *    同一のキーのデータが既に存在する場合、addはエラーとして保存を拒否する
-         *    一方でputは新規データで上書きする
-         */
-        const request: IDBRequest = store.put(data);
-
-        // イベントハンドラ（add成功時）を登録
-        request.onsuccess = (event) => {
-        };
-
-        // イベントハンドラ（add失敗時）を登録
-        request.onerror = (event: Event) => {
-          const error: DOMException | null = request.error;
-          console.log("Error: ", error);
-        };
-
-      });
-
-      // イベントハンドラ（トランザクションが完了時）を登録
-      transaction.oncomplete = (event: Event) => {
-      };
-
-      // イベントハンドラ（トランザクション中のエラー発生時）を登録
-      transaction.onerror = (event: Event) => {
-        const iDBRequest  : IDBRequest          = event.target as IDBRequest;
-        const error       : DOMException | null = iDBRequest.error;
-        console.log("Error: ", error);
-      };
-
+    DBDeleteRequest.onsuccess = (event) => {
+      if(successCallback){ successCallback(); }
     }
 
-    this.manipulate(createCallback);
+    DBDeleteRequest.onerror = (event) => {
+      ;
+    }
 
   }
 
@@ -184,6 +155,69 @@ export class IDBHandler{
     }
 
     this.manipulate(readCallback);
+
+  }
+
+  /**
+   * 指定したオブジェクトストアへデータを保存するメソッド
+   * 既存のデータと競合した場合は、本メソッドで指定されたデータで上書きを実行する
+   * @param targetStoreName データを保存するオブジェクトストアの名前
+   * @param dataToSave      保存するデータ
+   */
+  static createRecords(targetStoreName: StoreName, dataToSave: Array<any>, 
+    successCallback?: () => void){
+    
+    const TRANSACTION_MODE: IDBTransactionMode  = "readwrite";    // 保存操作の場合はreadwriteモードで固定
+
+    const createCallback = (iDB: IDBDatabase) => {
+
+      // トランザクションを開始 アクセス対象のストアを指定
+      const transaction: IDBTransaction = iDB.transaction(targetStoreName, TRANSACTION_MODE);
+
+      // アクセス対象のストアを取得
+      const store: IDBObjectStore = transaction.objectStore(targetStoreName);
+
+      // 各データごとにトランザクションを実行
+      dataToSave.forEach((data) => {
+
+        // トランザクションを実行
+        /** Policy: データ重複時の対応
+         *    既存のデータと競合した場合は、UIにセットされているデータを正として扱い、これで上書きをする
+         */
+        /** Memo: addとputの違い
+         *    iDBへのデータ保存メソッドにはaddとputが存在する
+         *    同一のキーのデータが既に存在する場合、addはエラーとして保存を拒否する
+         *    一方でputは新規データで上書きする
+         */
+        const request: IDBRequest = store.put(data);
+
+        // イベントハンドラ（add成功時）を登録
+        request.onsuccess = (event) => {
+          if(successCallback){ successCallback(); }
+        };
+
+        // イベントハンドラ（add失敗時）を登録
+        request.onerror = (event: Event) => {
+          const error: DOMException | null = request.error;
+          console.log("Error: ", error);
+        };
+
+      });
+
+      // イベントハンドラ（トランザクションが完了時）を登録
+      transaction.oncomplete = (event: Event) => {
+      };
+
+      // イベントハンドラ（トランザクション中のエラー発生時）を登録
+      transaction.onerror = (event: Event) => {
+        const iDBRequest  : IDBRequest          = event.target as IDBRequest;
+        const error       : DOMException | null = iDBRequest.error;
+        console.log("Error: ", error);
+      };
+
+    }
+
+    this.manipulate(createCallback);
 
   }
   
