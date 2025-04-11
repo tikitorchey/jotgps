@@ -3,6 +3,7 @@ import { Button, Card, CardContent, Grid2, Divider, TextField, Typography, CardA
 import { Storage, Save, BrowserUpdated, DeleteForever } from "@mui/icons-material";
 import { JGEngine } from "../../../jgEngine/jgEngine";
 import { Jotting } from "../../../jgEngine/types/jotting";
+import { UXSupport } from "../../../jgEngine/uxSupport";
 
 /**
  * Outline	: XXXするComponent
@@ -41,14 +42,13 @@ export const DevIDBControl: React.FC<Props> = ({ jottingList, setJottingList }) 
 
   const onClickDBReadAllButton = async () => {
 
-    // 取得したレコードをUI上に読み込み済みのレコード一覧に追加する処理
-    const addReadRecords = (readRecords: Array<any>) => {
-      const clonedList = structuredClone(jottingList);
-      readRecords.forEach( (record: any) => { clonedList.push(record) } );
-      setJottingList(clonedList);
+    const successCallback = (readRecords: Array<any>) => {
+      // UI上に読み込み済みのレコードと取得したレコードを合体
+      const mergedRecords: Array<Jotting> = UXSupport.mergeRecords(jottingList, readRecords);
+      setJottingList(mergedRecords);
     }
 
-    JGEngine.iDBReadAllJottings(addReadRecords);
+    JGEngine.iDBReadAllJottings(successCallback);
   }
 
   const onClickDBReadTargetButton = async () => {
@@ -61,13 +61,13 @@ export const DevIDBControl: React.FC<Props> = ({ jottingList, setJottingList }) 
     [ inputRefTargetKey1, inputRefTargetKey2, inputRefTargetKey3] .forEach( (ref) => { push(ref); } )
 
     // 取得したレコードをUI上に読み込み済みのレコード一覧に追加する処理
-    const addReadRecords = (readRecords: Array<any>) => {
-      const clonedList = structuredClone(jottingList);
-      readRecords.forEach( (record: any) => { clonedList.push(record) } );
-      setJottingList(clonedList);
+    const successCallback = (readRecords: Array<any>) => {
+      // UI上に読み込み済みのレコードと取得したレコードを合体
+      const mergedRecords: Array<Jotting> = UXSupport.mergeRecords(jottingList, readRecords);
+      setJottingList(mergedRecords);
     }
 
-    JGEngine.iDBReadJottingsByKey(targetKeys, addReadRecords);
+    JGEngine.iDBReadJottingsByKey(targetKeys, successCallback);
   }
 
   const onClickFactoryResetButton = async () => {

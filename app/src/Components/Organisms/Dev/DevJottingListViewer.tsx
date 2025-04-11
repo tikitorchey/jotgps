@@ -66,9 +66,15 @@ export const DevJottingListViewer: React.FC<Props> = ({ jottingList }) => {
         </TableCell>
 
         {/** Date */}
+        {/**
         <TableCell>
-          { (jotting?.metaData?.date ? formtDate(jotting.metaData.date) : "-" ) }
+          { (jotting?.metaData.date.created ? formtDate(jotting.metaData.date.created) : "-" ) }
         </TableCell>
+        */}
+        <TableCell>
+          { (jotting?.metaData.date.updated ? formtDate(jotting.metaData.date.updated) : "-" ) }
+        </TableCell>
+
 
       </TableRow>
 
@@ -107,8 +113,8 @@ export const DevJottingListViewer: React.FC<Props> = ({ jottingList }) => {
 
           <TableHead>
             <TableRow>
-              <TableCell> ID    </TableCell>
-              <TableCell> Date  </TableCell>
+              <TableCell> ID            </TableCell>
+              <TableCell> Updated Date  </TableCell>
             </TableRow>
           </TableHead>
 

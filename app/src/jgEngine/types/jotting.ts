@@ -32,7 +32,7 @@ export type Jotting = {
   gpsCoords : LatLng;
   supInfo   : { alt: number | null };
   metaData  : {
-    date        : number  | null,
+    date        : { created: number | null, updated: number | null },
     title       : string  | null,
     description : string  | null
   }

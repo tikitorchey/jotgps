@@ -2,6 +2,7 @@ import IDBHandler from "./dataPerpetuations/iDB/iDBHandler";
 import Jotting from "./types/jotting";
 import { StoreName } from "./dataPerpetuations/iDB/iDBSchema";
 import { JSONHandler } from "./dataPerpetuations/json/jsonHandler";
+import UXSupport from "./uxSupport";
 
 const IDB_STORENAME_JOTTING: StoreName = "jotting";
 const MSG_NAV_GEOAPI_UNSUPPORTED_JPN: string = "ご利用のブラウザはGPS座標の所得に対応していない可能性があります。";
@@ -78,7 +79,7 @@ export class JGEngine{
       const importedJottings  = jsObject as Array<Jotting>;
 
       /** Todo:
-       *    フォーマットのチェック処理を追加
+       *    フォーマットのチェック処理（型ガード）を追加
        */
 
       return importedJottings;
@@ -112,7 +113,7 @@ export class JGEngine{
     IDBHandler.createRecords(IDB_STORENAME_JOTTING, jottingToSave, successCallback);
   }
 
-  static iDBReadAllJottings(func: (records: Array<any>) => void){
+  static iDBReadAllJottings(func: (records: Array<Jotting>) => void){
     const successCallback = (records: Array<any>) => {
       func(records);
     }

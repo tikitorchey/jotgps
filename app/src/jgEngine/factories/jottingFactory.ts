@@ -10,7 +10,7 @@ export class JottingFactory{
       gpsCoords : { lat: null, lng: null },
       supInfo   : { alt: null },
       metaData  : {
-        date        : null,
+        date        : { created: null, updated: null },
         title       : null,
         description : null
       }
@@ -28,7 +28,8 @@ export class JottingFactory{
     jotting.gpsCoords.lat  = geoPos.coords.latitude;
     jotting.gpsCoords.lng  = geoPos.coords.longitude;
     jotting.supInfo.alt    = geoPos.coords.altitude;
-    jotting.metaData.date  = Date.now();
+    jotting.metaData.date.created = Date.now();
+    jotting.metaData.date.updated = Date.now();
   }
 
 }
