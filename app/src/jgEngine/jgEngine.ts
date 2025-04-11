@@ -127,6 +127,13 @@ export class JGEngine{
     IDBHandler.readRecordsByKey(IDB_STORENAME_JOTTING, tardetKeys, successCallback);
   }
 
+  static iDBDeleteJottingsByKey(tardetKeys: Array<string>, func: () => void){
+    const successCallback = () => {
+      func();
+    }
+    IDBHandler.deleteRecordsByKey(IDB_STORENAME_JOTTING, tardetKeys, successCallback);
+  }
+
 }
 
 export default JGEngine

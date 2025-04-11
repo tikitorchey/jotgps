@@ -83,6 +83,11 @@ export class IDBHandler{
 
   }
 
+  /**
+   * IndexedDBのアプリ用領域自体を削除するメソッド
+   * オブジェクトストアのクリーンナップではないため注意
+   * @param successCallback 
+   */
   static async factoryReset(successCallback?: () => void){
 
     const targetDBName: string = IDB_SCHEMA.DB_NAME;      // ストア定義から現行のDB名を取得
@@ -163,55 +168,6 @@ export class IDBHandler{
     }
 
     this.manipulate(createCallback);
-
-  }
-
-  static daleteRecords(targetStoreName: StoreName, dataToSave: Array<any>, 
-    successCallback?: () => void){
-    
-      const TRANSACTION_MODE: IDBTransactionMode  = "readwrite";    // 保存操作の場合はreadwriteモードで固定
-
-      const deleteCallback = (iDB: IDBDatabase) => {
-  
-        // トランザクションを開始 アクセス対象のストアを指定
-        const transaction: IDBTransaction = iDB.transaction(targetStoreName, TRANSACTION_MODE);
-  
-        // アクセス対象のストアを取得
-        const store: IDBObjectStore = transaction.objectStore(targetStoreName);
-  
-        // 各データごとにトランザクションを実行
-        dataToSave.forEach((data) => {
-  
-          // トランザクションを実行
-          const request: IDBRequest = store.put(data);
-  
-          // イベントハンドラ（add成功時）を登録
-          request.onsuccess = (event) => {
-            if(successCallback){ successCallback(); }
-          };
-  
-          // イベントハンドラ（add失敗時）を登録
-          request.onerror = (event: Event) => {
-            const error: DOMException | null = request.error;
-            console.log("Error: ", error);
-          };
-  
-        });
-  
-        // イベントハンドラ（トランザクションが完了時）を登録
-        transaction.oncomplete = (event: Event) => {
-        };
-  
-        // イベントハンドラ（トランザクション中のエラー発生時）を登録
-        transaction.onerror = (event: Event) => {
-          const iDBRequest  : IDBRequest          = event.target as IDBRequest;
-          const error       : DOMException | null = iDBRequest.error;
-          console.log("Error: ", error);
-        };
-  
-      }
-  
-      this.manipulate(deleteCallback);  
 
   }
   
@@ -339,6 +295,56 @@ export class IDBHandler{
     this.manipulate(readCallback);
 
   }
+  
+  static async deleteRecordsByKey(targetStoreName: StoreName, targetKeys: Array<string>, 
+    successCallback?: () => void){
+    
+    const TRANSACTION_MODE: IDBTransactionMode  = "readwrite";    // 削除操作の場合はreadwriteモードで固定
+
+    const deleteCallback = (iDB: IDBDatabase) => {
+
+      // トランザクションを開始 アクセス対象のストアを指定
+      const transaction: IDBTransaction = iDB.transaction(targetStoreName, TRANSACTION_MODE);
+
+      // アクセス対象のストアを取得
+      const store: IDBObjectStore = transaction.objectStore(targetStoreName);
+
+      // 各データごとにトランザクションを実行
+      targetKeys.forEach((key: string) => {
+
+        // トランザクションを実行
+        const request: IDBRequest = store.delete(key);
+
+        // イベントハンドラ（add成功時）を登録
+        request.onsuccess = (event) => {
+          if(successCallback){ successCallback(); }
+        };
+
+        // イベントハンドラ（add失敗時）を登録
+        request.onerror = (event: Event) => {
+          const error: DOMException | null = request.error;
+          console.log("Error: ", error);
+        };
+
+      });
+
+      // イベントハンドラ（トランザクションが完了時）を登録
+      transaction.oncomplete = (event: Event) => {
+      };
+
+      // イベントハンドラ（トランザクション中のエラー発生時）を登録
+      transaction.onerror = (event: Event) => {
+        const iDBRequest  : IDBRequest          = event.target as IDBRequest;
+        const error       : DOMException | null = iDBRequest.error;
+        console.log("Error: ", error);
+      };
+
+    }
+
+    this.manipulate(deleteCallback);  
+
+  }
+
 
 }
 

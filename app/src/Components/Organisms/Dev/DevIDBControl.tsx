@@ -26,7 +26,6 @@ export const DevIDBControl: React.FC<Props> = ({ jottingList, setJottingList }) 
   // ___ use ref ___ ___ ___ ___ ___
   const inputRefTargetKey1 = useRef<HTMLInputElement>(null);
   const inputRefTargetKey2 = useRef<HTMLInputElement>(null);
-  const inputRefTargetKey3 = useRef<HTMLInputElement>(null);
   
   // ___ use effect ___ ___ ___ ___ ___
   useEffect( () => { console.log(sampleState) }, [ sampleState ] );
@@ -58,7 +57,7 @@ export const DevIDBControl: React.FC<Props> = ({ jottingList, setJottingList }) 
     const push = (ref: React.RefObject<HTMLInputElement | null>) => {
       if(ref.current?.value){ targetKeys.push(ref.current?.value); }    // UIに入力値がある場合はリストに追加
     }
-    [ inputRefTargetKey1, inputRefTargetKey2, inputRefTargetKey3] .forEach( (ref) => { push(ref); } )
+    [ inputRefTargetKey1, inputRefTargetKey2 ] .forEach( (ref) => { push(ref); } );
 
     // 取得したレコードをUI上に読み込み済みのレコード一覧に追加する処理
     const successCallback = (readRecords: Array<any>) => {
@@ -68,6 +67,25 @@ export const DevIDBControl: React.FC<Props> = ({ jottingList, setJottingList }) 
     }
 
     JGEngine.iDBReadJottingsByKey(targetKeys, successCallback);
+
+  }
+
+  const onClickDBDeleteTargetButton = () => {
+
+    // 取得するレコードのキーのリストを作成
+    const targetKeys: Array<string> = [];
+    const push = (ref: React.RefObject<HTMLInputElement | null>) => {
+      if(ref.current?.value){ targetKeys.push(ref.current?.value); }    // UIに入力値がある場合はリストに追加
+    }
+    [ inputRefTargetKey1, inputRefTargetKey2 ] .forEach( (ref) => { push(ref); } );
+
+    // 取得したレコードをUI上に読み込み済みのレコード一覧に追加する処理
+    const successCallback = () => {
+      alert("IndexedDBから指定のレコードを削除しました");
+    }
+
+    JGEngine.iDBDeleteJottingsByKey(targetKeys, successCallback);
+
   }
 
   const onClickFactoryResetButton = async () => {
@@ -112,16 +130,21 @@ export const DevIDBControl: React.FC<Props> = ({ jottingList, setJottingList }) 
         <Grid2 container spacing = { 1 }>
           <TextField label = "Target ID" variant = "outlined" sx = {{ marginRight: "auto" }} inputRef = { inputRefTargetKey1 }/>
           <TextField label = "Target ID" variant = "outlined" sx = {{ marginRight: "auto" }} inputRef = { inputRefTargetKey2 }/>
-          <TextField label = "Target ID" variant = "outlined" sx = {{ marginRight: "auto" }} inputRef = { inputRefTargetKey3 }/>
         </Grid2>
         
         <Divider orientation = "vertical" flexItem />
 
+        <Tooltip title = "IndexDBから削除">
+          <Button size = "small" onClick = { onClickDBDeleteTargetButton }> <DeleteForever color = "secondary"/> </Button>
+        </Tooltip>
+
         <Tooltip title = "IndexDBから読み込み">
-          <Button size = "small" onClick = { onClickDBReadTargetButton }> <BrowserUpdated /> </Button>
+          <Button size = "small" onClick = { onClickDBReadTargetButton }> <BrowserUpdated/> </Button>
         </Tooltip>
 
       </CardActions>
+
+      <Divider />
 
     </Card>
 
