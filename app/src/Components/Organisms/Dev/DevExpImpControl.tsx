@@ -3,6 +3,7 @@ import { Button, Card, CardContent, Tooltip, Typography, CardActions } from "@mu
 import { ImportExport, FileUpload, FileDownload } from "@mui/icons-material";
 import { JGEngine } from "../../../jgEngine/jgEngine";
 import Jotting from "../../../jgEngine/types/jotting";
+import { UXSupport } from "../../../jgEngine/uxSupport";
 
 
 const FILE_NAME: string = "jotgps";
@@ -39,8 +40,14 @@ export const DevExpImpControl: React.FC<Props> = ({ jottingList, setJottingList 
   const onClickImportButton = async () => {
 
     try {
+
+      // JSONからレコードを復元
       const importedJottings = await JGEngine.importJottings();
-      setJottingList(importedJottings);
+
+      // UI上に読み込み済みのレコードと取得したレコードを合体
+      const mergedRecords: Array<Jotting> = UXSupport.mergeRecords(jottingList, importedJottings);
+      setJottingList(mergedRecords);
+
     } catch(e) {
       ;      
     }
