@@ -1,20 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Button, Box, Card, CardContent, Typography, CardActions, CardActionArea, Grid2 } from "@mui/material";
+import { Button, Card, CardContent, Tooltip, Typography, CardActions } from "@mui/material";
 import { ImportExport, FileUpload, FileDownload } from "@mui/icons-material";
 import { JGEngine } from "../../../jgEngine/jgEngine";
-import Jotting from "../../../jgEngine/models/jotting";
+import Jotting from "../../../jgEngine/types/jotting";
+import { UXSupport } from "../../../jgEngine/uxSupport";
 
 
 const FILE_NAME: string = "jotgps";
 
-/**
- * Outline	: XXXするComponent
- * Logic		: - AAAをBBBにする
- *            - 親ComponentからCCCを受け取り、DDDとしたものを子Componentに渡す
- * View			: - KKKをリスト表示する
- */
-
-// Type Declaration of Props
 type Props = {
   jottingList: Array<Jotting>,
   setJottingList: any
@@ -26,7 +19,6 @@ export const DevExpImpControl: React.FC<Props> = ({ jottingList, setJottingList 
   const [ sampleState, setSampleState ] = useState<string>('This is SampleState');
 
   // ___ use effect ___ ___ ___ ___ ___
-  useEffect( () => { console.log(sampleState) }, [ sampleState ] );
 
   // ___ event handler ___ ___ ___ ___ ___
   const handleChange = (e : React.ChangeEvent<HTMLInputElement>) => {
@@ -45,13 +37,30 @@ export const DevExpImpControl: React.FC<Props> = ({ jottingList, setJottingList 
   }
 
   const onClickImportButton = async () => {
-    const importedJSON      = await JGEngine.importJSON();
-    const importedJottings  = importedJSON as Array<Jotting>;
-    setJottingList(importedJottings);
+
+    try {
+
+      // JSONからレコードを復元
+      const importedJottings = await JGEngine.importJottings();
+
+      // UI上に読み込み済みのレコードと取得したレコードを合体
+      const mergedRecords: Array<Jotting> = UXSupport.mergeRecords(jottingList, importedJottings);
+      setJottingList(mergedRecords);
+
+    } catch(e) {
+      ;      
+    }
+
   }
 
   const onClickExportButton = async () => {
-    await JGEngine.exportJSON(jottingList, FILE_NAME);
+
+    try{
+      await JGEngine.exportJottings(jottingList, FILE_NAME);
+    } catch(e) {
+      ;
+    }
+    
   }
 
   return (
@@ -60,17 +69,20 @@ export const DevExpImpControl: React.FC<Props> = ({ jottingList, setJottingList 
 
       <CardContent>
         <Typography variant = "h5" component = "div">
-          <ImportExport /> Export / Import Records Loaded on The UI
+          <ImportExport /> Export / Import 
         </Typography>
         <Typography variant = "body2" sx = {{ color: 'text.secondary' }}>
-          Export the records on the UI to a JSON file and save it to the device.
-          Import records from a JSON file and load them on the UI.
+          UI上に読み込まれたレコードをJSONファイルに出力します。また、JSONファイルからレコードを読み込みUI上に復元します。
         </Typography>
       </CardContent>
 
       <CardActions sx = {{ display: "flex", justifyContent: "flex-end" }}>
-        <Button size = "small" onClick = { onClickExportButton }>   <FileUpload />    </Button>
-        <Button size = "small" onClick = { onClickImportButton } >  <FileDownload />  </Button>
+        <Tooltip title = "JSONファイルに出力">
+          <Button size = "small" onClick = { onClickExportButton }> <FileUpload /> </Button>
+        </Tooltip>
+        <Tooltip title = "JSONファイルから読み込み">
+          <Button size = "small" onClick = { onClickImportButton } > <FileDownload /> </Button>
+        </Tooltip>
       </CardActions>
 
     </Card>

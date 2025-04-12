@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 /**
  * Outline	: XXXするComponent
@@ -16,6 +16,9 @@ export const FCTemplate: React.FC<Props> = ({ sampleProp }) => {
 
   // ___ state ___ ___ ___ ___ ___
   const [ sampleState, setSampleState ] = useState<string>('This is SampleState');
+
+  // ___ use ref ___ ___ ___ ___ ___
+  const ref = useRef<HTMLInputElement>(null);
 
   // ___ use effect ___ ___ ___ ___ ___
   useEffect( () => { console.log(sampleState) }, [ sampleState ] );

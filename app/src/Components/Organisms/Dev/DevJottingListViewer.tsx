@@ -2,16 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Button, Card, CardContent, Typography, CardActions } from "@mui/material";
 import { Table, TableBody, TableCell, TableRow, TableHead } from "@mui/material";
 import { DataArray, ArrowCircleRight, ArrowCircleLeft } from "@mui/icons-material";
-import Jotting from "src/jgEngine/models/jotting";
+import Jotting from "src/jgEngine/types/jotting";
 
-/**
- * Outline	: XXXするComponent
- * Logic		: - AAAをBBBにする
- *            - 親ComponentからCCCを受け取り、DDDとしたものを子Componentに渡す
- * View			: - KKKをリスト表示する
- */
 
-// Type Declaration of Props
 type Props = {
   jottingList: Array<Jotting>;
 }
@@ -28,9 +21,6 @@ export const DevJottingListViewer: React.FC<Props> = ({ jottingList }) => {
   // ___ event handler ___ ___ ___ ___ ___
 
   // ___ method ___ ___ ___ ___ ___
-  const test = () => {
-    console.log('test');
-  }
 
   const incrementTableIndex = () => {
     setTableIndex(tableIndex + 1);
@@ -44,29 +34,64 @@ export const DevJottingListViewer: React.FC<Props> = ({ jottingList }) => {
     }
   }
 
-  const provideTableRow = (jotting: Jotting) => {
-    // Math.random() > Reactコンポーネントの仕様上、空データ行の場合でもキーが必要なため適当に生成
+  const displayJottingInfo = (jotting: Jotting | undefined) => {
+    window.prompt(
+      JSON.stringify(jotting, null , 2),
+      JSON.stringify(jotting)
+    );
+  }
+
+  /**
+   * テーブルの各行を生成する関数。
+   * Jottingを受け取りセルに各データを表示する。
+   * undefinedを受け取った場合にも行を生成する。
+   * @param jotting 
+   * @returns 
+   */
+  const provideTableRow = (jotting: Jotting | undefined): React.JSX.Element => {
+
+    const shortenID = (id   : string): string => { return id.slice(-5) };
+    const formtDate = (date : number): string => { return (new Date(date)).toString() };
+
+    // Math.random() -> Reactの仕様上、空データ行でもキーが必要なため適当に生成
     const row: React.JSX.Element = 
+
       <TableRow key = { jotting?.id ? jotting.id : Math.random() }>
-        <TableCell> { jotting?.id }                                              </TableCell>
-        <TableCell> { (jotting?.metaData.date ? jotting.metaData.date : "-" ) }  </TableCell>
-        <TableCell> { (jotting?.gpsCoords.lat ? jotting.gpsCoords.lat : "-" ) }  </TableCell>
-        <TableCell> { (jotting?.gpsCoords.lng ? jotting.gpsCoords.lng : "-" ) }  </TableCell>
+
+        {/** ID */}
+        <TableCell>
+          <Button onClick = { () => displayJottingInfo(jotting) }>
+            { jotting?.id ? shortenID(jotting.id) : "-" }
+          </Button>
+        </TableCell>
+
+        {/** Date */}
+        {/**
+        <TableCell>
+          { (jotting?.metaData.date.created ? formtDate(jotting.metaData.date.created) : "-" ) }
+        </TableCell>
+        */}
+        <TableCell>
+          { (jotting?.metaData.date.updated ? formtDate(jotting.metaData.date.updated) : "-" ) }
+        </TableCell>
+
+
       </TableRow>
+
     return row;
   }
 
   const provideTableRows = (tableSize: number): Array<React.JSX.Element> => {
 
-    const table = [];
+    const rows = [];
 
     for(let i = 0; i < tableSize; i++){
-      const targetJotting = jottingList[ i + (tableIndex * TABLE_SIZE) ];
-      const row = provideTableRow(targetJotting)
-      table.push(row);
+      const targetJotting : Jotting | undefined = jottingList[ i + (tableIndex * TABLE_SIZE) ];
+      const row           : React.JSX.Element   = provideTableRow(targetJotting);
+      rows.push(row);
     }
     
-    return table;
+    return rows;
   } 
 
   return (
@@ -76,20 +101,20 @@ export const DevJottingListViewer: React.FC<Props> = ({ jottingList }) => {
       <CardContent>
 
         <Typography variant = "h5" component = "div">
-          <DataArray /> Records Loaded on The UI 
+          <DataArray /> Jotting Records
         </Typography>
+        
         <Typography variant = "body2" sx = {{ color: 'text.secondary' }}>
-          This is a list of records loaded on React's State (these data are not necessarily saved on the IndexedDB).
+          UI上に読み込まれたレコードの一覧です。
+          IndexedDB内に保存されたレコードとは別物です。
         </Typography>
 
         <Table>
 
           <TableHead>
             <TableRow>
-              <TableCell> ID         </TableCell>
-              <TableCell> Date       </TableCell>
-              <TableCell> Latitude   </TableCell>
-              <TableCell> Longitude  </TableCell>
+              <TableCell> ID            </TableCell>
+              <TableCell> Updated Date  </TableCell>
             </TableRow>
           </TableHead>
 

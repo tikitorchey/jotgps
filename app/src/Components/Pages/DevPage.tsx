@@ -2,8 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { Button, Box, Card, CardContent, Typography, CardActions, CardActionArea, Grid2 } from "@mui/material";
 import { Table, TableBody, TableCell, TableRow, TableHead } from "@mui/material";
 import { JGEngine } from "../../jgEngine/jgEngine";
-import { LatLng, Jotter } from "../../jgEngine/types";
-import { Jotting } from "../../jgEngine/models/jotting";
+import { LatLng, Jotter } from "../../jgEngine/types/types";
+import { Jotting } from "../../jgEngine/types/jotting";
 import { DevJottingListViewer } from "../Organisms/Dev/DevJottingListViewer";
 import { DevGPSViewer } from "../Organisms/Dev/DevGPSViewer";
 import DevJottingListControl from "../Organisms/Dev/DevJottingListControl";
@@ -31,55 +31,43 @@ export const DevPage: React.FC = () => {
 
   return (
 
-    <div>
+    <Grid2 container spacing = { 2 }>
 
-      <h2>{ DevPage.name }</h2>
+      {/** UI(State)に読み込まれているレコードの表示系 */}
+      <Grid2 container size = { 12 } spacing = { 2 }>
 
-      <Grid2 container spacing = { 2 }>
-
-        {/** 基本機能の開発用エリア */}
-        <Grid2 container size = { 12 } spacing = { 2 }>
-
-          {/** UI State */}
-          <Grid2 size = { 12 } >
-            <DevJottingListViewer jottingList = { jottingList } />
-          </Grid2>
-
-          {/** Jottingの管理用 */}
-          <Grid2 size = {{ sm: 6 }}>
-            <DevJottingListControl jottingList = { jottingList } setJottingList = { setJottingList } />
-          </Grid2>
-
-          {/** Import/Exportの開発用 */}
-          <Grid2 size = {{ sm: 6 }}>
-            <DevExpImpControl jottingList = { jottingList } setJottingList = { setJottingList }/>
-          </Grid2>
-
-        </Grid2>
-
-        {/** 追加機能の開発用エリア */}
-        <Grid2 container size = { 12 } spacing = { 2 } >
-
-          {/** IndexedDBの開発用 */}
-          <Grid2>
-            <DevIDBControl jottingList = { jottingList } setJottingList = { setJottingList }  />
-          </Grid2>
-
-        </Grid2>
-
-        {/** 単体の小機能の開発用 */}
-        <Grid2 container size = { 12 } spacing = { 2 } >
-
-          {/** Geolocation APIの開発用 */}
-          <Grid2 size = { 6 }>
-            <DevGPSViewer />
-          </Grid2>
-
+        <Grid2 size = { 12 } >
+          <DevJottingListViewer jottingList = { jottingList } />
         </Grid2>
 
       </Grid2>
 
-    </div>
+      {/** レコードのコントロール系 */}
+      <Grid2 container size = { 12 } spacing = { 2 }>
+
+        {/** Jotting */}
+        <Grid2 size = {{ sm: 6 }}>
+          <DevJottingListControl jottingList = { jottingList } setJottingList = { setJottingList } />
+        </Grid2>
+
+        {/** Import/Export */}
+        <Grid2 size = {{ sm: 6 }}>
+          <DevExpImpControl jottingList = { jottingList } setJottingList = { setJottingList }/>
+        </Grid2>
+
+        {/** IndexedDB */}
+        <Grid2 size = {{ sm: 6 }}>
+          <DevIDBControl jottingList = { jottingList } setJottingList = { setJottingList }  />
+        </Grid2>
+
+        {/** Geolocation API */}
+        <Grid2 size = {{ sm: 6 }}>
+          <DevGPSViewer />
+        </Grid2>
+
+      </Grid2>
+
+    </Grid2>
   );
 };
 

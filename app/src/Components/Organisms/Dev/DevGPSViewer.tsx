@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button, Card, CardContent, Typography, CardActions } from "@mui/material";
 import { Table, TableBody, TableCell, TableRow, TableHead, Tooltip } from "@mui/material";
 import { JGEngine } from "../../../jgEngine/jgEngine";
-import { LatLng, Jotter } from "../../../jgEngine/types";
+import { LatLng, Jotter } from "../../../jgEngine/types/types";
 import { GpsFixed } from "@mui/icons-material";
 
 /**
@@ -26,11 +26,14 @@ export const DevGPSViewer: React.FC = () => {
     console.log('test');
   }
   
-  const onClickGetGPSCoordsButton = async () => {
+  const onClickGetGPSCoordsButton = () => {
 
-    const geoPos: GeolocationPosition = await JGEngine.getGPSCoords();
-    const gpsCoords: LatLng = { lat: geoPos.coords.latitude, lng: geoPos.coords.longitude }
-    setGPSCoords(gpsCoords);
+    const successCallback: PositionCallback = (geoPos: GeolocationPosition) => {
+      const gpsCoords: LatLng = { lat: geoPos.coords.latitude, lng: geoPos.coords.longitude }
+      setGPSCoords(gpsCoords);
+    }
+
+    JGEngine.getGPSCoords(successCallback);
     
   }
 
@@ -42,10 +45,10 @@ export const DevGPSViewer: React.FC = () => {
 
           <CardContent>
             <Typography variant = "h5" component = "div">
-              <GpsFixed /> Get GPS Coordinates
+              <GpsFixed /> GPS Coordinates
             </Typography>
             <Typography variant = "body2" sx = {{ color: 'text.secondary' }}>
-              Get the location coordinates of the device via the browser's geolocation API.
+              GeoAPIから端末の位置情報を取得します。
             </Typography>
           </CardContent>
 
@@ -69,7 +72,7 @@ export const DevGPSViewer: React.FC = () => {
         </CardContent>
 
         <CardActions sx = {{ display: "flex", justifyContent: "flex-end" }}>
-          <Tooltip title = "Get GPS Coordinates">
+          <Tooltip title = "GPS座標を取得">
             <Button size = "large" onClick = { onClickGetGPSCoordsButton } > Go! </Button>
           </Tooltip>
         </CardActions>

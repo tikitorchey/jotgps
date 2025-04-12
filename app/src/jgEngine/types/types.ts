@@ -1,4 +1,4 @@
-import { Jotting } from "./models/jotting"
+import { Jotting } from "./jotting"
 
 // ToDo: 緯度経度のフォーマットを具体化する
 // 参考： 10新数表記かつ、小数点以下は6桁がGPS利用時には一般的とのこと
