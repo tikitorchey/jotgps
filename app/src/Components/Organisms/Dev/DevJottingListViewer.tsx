@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button, Card, CardContent, Typography, CardActions } from "@mui/material";
 import { Table, TableBody, TableCell, TableRow, TableHead } from "@mui/material";
 import { DataArray, ArrowCircleRight, ArrowCircleLeft } from "@mui/icons-material";
-import Jotting from "src/jgEngine/types/jotting";
+import Jotting from "src/core/types/jotting";
 
 
 type Props = {

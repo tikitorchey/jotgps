@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Button, Card, CardContent, Typography, CardActions, Grid2, Tooltip } from "@mui/material";
 import { DataArray, AddCircleOutline, RemoveCircleOutline, DeleteForever } from "@mui/icons-material";
-import { JGEngine } from "../../../jgEngine/jgEngine";
-import { UXSupport } from "../../../jgEngine/uxSupport";
-import { Jotting } from "../../../jgEngine/types/jotting";
-import { JottingFactory } from "../../../jgEngine/factories/jottingFactory";
+import { JGEngine } from "../../../core/jgEngine";
+import { UXSupport } from "../../../core/uxSupport";
+import { Jotting } from "../../../core/types/jotting";
+import { JottingFactory } from "../../../core/factories/jottingFactory";
 
 
 type Props = {

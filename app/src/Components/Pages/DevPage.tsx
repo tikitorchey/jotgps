@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Button, Box, Card, CardContent, Typography, CardActions, CardActionArea, Grid2 } from "@mui/material";
 import { Table, TableBody, TableCell, TableRow, TableHead } from "@mui/material";
-import { JGEngine } from "../../jgEngine/jgEngine";
-import { LatLng, Jotter } from "../../jgEngine/types/types";
-import { Jotting } from "../../jgEngine/types/jotting";
+import { JGEngine } from "../../core/jgEngine";
+import { LatLng, Jotter } from "../../core/types/types";
+import { Jotting } from "../../core/types/jotting";
 import { DevJottingListViewer } from "../Organisms/Dev/DevJottingListViewer";
 import { DevGPSViewer } from "../Organisms/Dev/DevGPSViewer";
 import DevJottingListControl from "../Organisms/Dev/DevJottingListControl";
