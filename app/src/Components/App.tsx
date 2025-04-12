@@ -17,25 +17,25 @@ const App : React.FunctionComponent = () => {
 
           <Grid container>
 
-            <Grid size = {{ xs: 3, sm: 1 }}>
+            <Grid size = {{ xs: 6, sm: 4, md: 3 }}>
               <Link to = '/' style = { { textDecoration: 'none' , fontWeight: 'bold' } }>
                 <span>Main</span>
               </Link>
             </Grid>
 
-            <Grid size = {{ xs: 3, sm: 1 }}>
+            <Grid size = {{ xs: 6, sm: 4, md: 3 }}>
               <Link to = '/preference' style = { { textDecoration: 'none' , fontWeight: 'bold' } }>
                 <span>Preference</span>
               </Link>
             </Grid>
 
-            <Grid size = {{ xs: 3, sm: 1 }}>
+            <Grid size = {{ xs: 6, sm: 4, md: 3 }}>
               <Link to = '/help' style = { { textDecoration: 'none' , fontWeight: 'bold' } }>
                 <span>Help</span>
               </Link>
             </Grid>
 
-            <Grid size = {{ xs: 3, sm: 1 }}>
+            <Grid size = {{ xs: 6, sm: 4, md: 3 }}>
               <Link to = '/dev' style = { { textDecoration: 'none' , fontWeight: 'bold' } }>
                 <span>Dev</span>
               </Link>

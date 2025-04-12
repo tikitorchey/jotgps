@@ -28,7 +28,6 @@ export const DevIDBControl: React.FC<Props> = ({ jottingList, setJottingList }) 
   const inputRefTargetKey2 = useRef<HTMLInputElement>(null);
   
   // ___ use effect ___ ___ ___ ___ ___
-  useEffect( () => { console.log(sampleState) }, [ sampleState ] );
 
   // ___ event handler ___ ___ ___ ___ ___
 

@@ -18,7 +18,6 @@ export const DevJottingListControl: React.FC<Props> = ({ jottingList, setJotting
   const [ sampleState, setSampleState ] = useState<string>('This is SampleState');
 
   // ___ use effect ___ ___ ___ ___ ___
-  useEffect( () => { console.log(sampleState) }, [ sampleState ] );
 
   // ___ event handler ___ ___ ___ ___ ___
 
