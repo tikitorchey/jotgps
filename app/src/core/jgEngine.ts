@@ -6,6 +6,7 @@ import UXSupport from "./uxSupport";
 import { resolve } from "path";
 
 const IDB_STORENAME_JOTTING: StoreName = "jotting";
+const MSG_NAV_GEOAPI_UNSUPPORTED_ENG: string = "the browser does not support Geolocation API.";
 const MSG_NAV_GEOAPI_UNSUPPORTED_JPN: string = "ご利用のブラウザはGPS座標の所得に対応していない可能性があります。";
 
 export class JGEngine{
@@ -50,8 +51,7 @@ export class JGEngine{
       return new Promise(executor);
 
     }else{
-      alert(MSG_NAV_GEOAPI_UNSUPPORTED_JPN);
-      throw new Error("the browser does not support Geolocation API.");
+      throw new Error(MSG_NAV_GEOAPI_UNSUPPORTED_ENG);
     }
     
   }
