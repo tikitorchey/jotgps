@@ -24,7 +24,7 @@ export class JottingFactory{
  * @param geoPos 
  *  Geolocation APIから取得したオブジェクト
  */
-  static setGPSCoords(jotting: Jotting, geoPos: GeolocationPosition){
+  static initialise(jotting: Jotting, geoPos: GeolocationPosition){
     jotting.gpsCoords.lat  = geoPos.coords.latitude;
     jotting.gpsCoords.lng  = geoPos.coords.longitude;
     jotting.supInfo.alt    = geoPos.coords.altitude;
