@@ -2,12 +2,9 @@ import IDBHandler from "./dataPerpetuations/iDB/iDBHandler";
 import Jotting from "./types/jotting";
 import { StoreName } from "./dataPerpetuations/iDB/iDBSchema";
 import { JSONHandler } from "./dataPerpetuations/json/jsonHandler";
-import UXSupport from "./uxSupport";
-import { resolve } from "path";
 
 const IDB_STORENAME_JOTTING: StoreName = "jotting";
-const MSG_NAV_GEOAPI_UNSUPPORTED_ENG: string = "the browser does not support Geolocation API.";
-const MSG_NAV_GEOAPI_UNSUPPORTED_JPN: string = "ご利用のブラウザはGPS座標の所得に対応していない可能性があります。";
+const ERRORMSG_GEO_NOT_SUPPORTED: string = "GEOLOCATION_NOT_SUPPORTED";
 
 export class JGEngine{
 
@@ -25,10 +22,6 @@ export class JGEngine{
 
     // ブラウザのGeoAPI対応可否の確認
     if("geolocation" in navigator){
-
-      /** Memo:
-       *    以下のPromise関連コードは改修を見据えて簡易記法を避けている
-       */
 
       const executor = (
         resolve : (value  : GeolocationPosition)      => void,
@@ -51,7 +44,7 @@ export class JGEngine{
       return new Promise(executor);
 
     }else{
-      throw new Error(MSG_NAV_GEOAPI_UNSUPPORTED_ENG);
+      throw new Error(ERRORMSG_GEO_NOT_SUPPORTED);
     }
     
   }
