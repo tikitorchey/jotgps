@@ -1,0 +1,3 @@
+- JottingのIDはULIDを使用する
+- JotterのIDはULIDを使用する
+- 日付の処理はすべて、Date.nowメソッドで取得されるエポックミリ秒で処理し、UI表示の段階でYYMMDD形式へ変換する
