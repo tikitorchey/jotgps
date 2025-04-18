@@ -2,10 +2,9 @@ import IDBHandler from "./dataPerpetuations/iDB/iDBHandler";
 import Jotting from "./types/jotting";
 import { StoreName } from "./dataPerpetuations/iDB/iDBSchema";
 import { JSONHandler } from "./dataPerpetuations/json/jsonHandler";
-import UXSupport from "./uxSupport";
 
 const IDB_STORENAME_JOTTING: StoreName = "jotting";
-const MSG_NAV_GEOAPI_UNSUPPORTED_JPN: string = "ご利用のブラウザはGPS座標の所得に対応していない可能性があります。";
+const ERRORMSG_GEO_NOT_SUPPORTED: string = "GEOLOCATION_NOT_SUPPORTED";
 
 export class JGEngine{
 
@@ -19,24 +18,33 @@ export class JGEngine{
    *  例えばhttps通信やlocalhostでの接続がこれに該当する
    * 
    */
-  static getGPSCoords(successCallback: PositionCallback, errorCallback?: PositionErrorCallback): void{
+  static async getGPSCoords(): Promise<GeolocationPosition>{
 
     // ブラウザのGeoAPI対応可否の確認
     if("geolocation" in navigator){
 
-      // 呼び出し元からエラーコールバックが設定されていない場合は、汎用のエラーハンドリングを設定する
-      if(!errorCallback){
-        const generalErrorCallback = (error: GeolocationPositionError) => {
-          console.debug(error);
-        }
-        errorCallback = generalErrorCallback;
-      }
+      const executor = (
+        resolve : (value  : GeolocationPosition)      => void,
+        reject  : (reason : GeolocationPositionError) => void
+      ) => {
 
-      // GeolocationAPIより現在地の座標を取得
-      navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
+        const successCallback: PositionCallback = (position: GeolocationPosition) => {
+          resolve(position);
+        }
+
+        const errorCallback: PositionErrorCallback = (error: GeolocationPositionError) => {
+          reject(error);
+        }
+
+        // GeolocationAPIより現在地の座標を取得
+        navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
+
+      };
+
+      return new Promise(executor);
 
     }else{
-      alert(MSG_NAV_GEOAPI_UNSUPPORTED_JPN);
+      throw new Error(ERRORMSG_GEO_NOT_SUPPORTED);
     }
     
   }

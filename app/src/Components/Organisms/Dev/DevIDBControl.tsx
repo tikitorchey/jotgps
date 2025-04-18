@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Button, Card, CardContent, Grid2, Divider, TextField, Typography, CardActions, Tooltip } from "@mui/material";
 import { Storage, Save, BrowserUpdated, DeleteForever } from "@mui/icons-material";
-import { JGEngine } from "../../../jgEngine/jgEngine";
-import { Jotting } from "../../../jgEngine/types/jotting";
-import { UXSupport } from "../../../jgEngine/uxSupport";
+import { JGEngine } from "../../../core/jgEngine";
+import { Jotting } from "../../../core/types/jotting";
+import { UXSupport } from "../../../core/uxSupport";
 
 /**
  * Outline	: XXXするComponent
